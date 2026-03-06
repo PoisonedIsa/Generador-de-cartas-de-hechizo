@@ -28,7 +28,7 @@
         "ritual": false,
         "clases": "Hechicero, Mago",
         "fuente": "Manual del Jugador 2024",
-        "descripcion": "",
+        "descripcion": "Elige una criatura voluntaria que puedas ver dentro del alcance. Hasta que el conjuro termine, la velocidad del objetivo se duplica, obtiene un bonificador de +2 a la Clase de Armadura, tiene Ventaja en las tiradas de salvación de Destreza y obtiene una acción bonus en cada uno de sus turnos. Esta acción puede usarse para realizar solo las acciones de Atacar (solo un ataque), Correr, Destrabarse, Esconderse o Utilizar. \nAl terminar el conjuro, el objetivo tiene el estado de Incapacitado y una velocidad de 0 hasta el final de tu siguiente turno, mientras una ola de letargo lo invade.",
         "niveles_superiores": ""
     },
     {
