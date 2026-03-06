@@ -39,20 +39,20 @@
         .cpat-odd { -webkit-mask-image: repeating-linear-gradient(to bottom, black 0, black var(--cpat-size), transparent var(--cpat-size), transparent calc(var(--cpat-size) * 2)); mask-image: repeating-linear-gradient(to bottom, black 0, black var(--cpat-size), transparent var(--cpat-size), transparent calc(var(--cpat-size) * 2)); transform: translateX(var(--cpat-offset-a)); }
         .cpat-even { -webkit-mask-image: repeating-linear-gradient(to bottom, transparent 0, transparent var(--cpat-size), black var(--cpat-size), black calc(var(--cpat-size) * 2)); mask-image: repeating-linear-gradient(to bottom, transparent 0, transparent var(--cpat-size), black var(--cpat-size), black calc(var(--cpat-size) * 2)); transform: translateX(var(--cpat-offset-b)); }
 
-        /* HOJAS Y CARTAS (AGREGADO AUTO-FLOW COLUMN DENSE PARA EMPAQUETAR BIEN LAS CARTAS DOBLES) */
+        /* HOJAS Y CARTAS */
         .a4-page { width: 297mm; height: 210mm; background: white; margin: 0 auto 20px auto; box-shadow: 0 4px 15px rgba(0,0,0,0.5); display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 1fr); grid-auto-flow: column dense; gap: 0; page-break-after: always; box-sizing: border-box; position: relative; overflow: hidden; }
         
         .spell-card { 
             width: 100%; height: 100%; 
-            background-color: var(--bg-back); /* MODIFICADO: Ahora el fondo exterior usa el color del reverso */
+            background-color: var(--bg-back); 
             border: var(--border-outer); 
             position: relative; overflow: hidden; display: flex; flex-direction: column; 
             box-sizing: border-box; 
-            padding: 3.5mm; /* GROSOR DEL MARCO COLOREADO EXTERIOR */
+            padding: 3.5mm; 
             transition: background-color 0.3s; 
         }
         
-        /* CARTA DOBLE (TOMA 2 FILAS DE ALTO) */
+        /* CARTA DOBLE */
         .spell-card.double-card {
             grid-row: span 2;
         }
@@ -62,12 +62,12 @@
             content: '';
             position: absolute;
             top: 50%; left: 0; right: 0;
-            border-top: 1.5px dashed rgba(0,0,0,0.6);
+            border-top: 1.5px dashed rgba(0,0,0,0.25);
             z-index: 30;
             pointer-events: none;
         }
 
-        /* NUEVO CONTENEDOR INTERNO DE LA CARTA (EL "PAPIRO") */
+        /* CONTENEDOR INTERNO DE LA CARTA (EL "PAPIRO") */
         .card-content {
             background-color: var(--bg-paper);
             border: var(--border-inner);
@@ -82,27 +82,42 @@
             transition: background-color 0.3s;
         }
         
-        /* Ignorar el fondo y botones en el apilamiento principal */
         .spell-card > *:not(.card-content):not(.pattern-layer):not(.delete-card-btn):not(.fold-indicator) { position: relative; z-index: 10; }
         
-        /* INDICADOR VISUAL DE DOBLEZ (SOLO PANTALLA) */
         .fold-indicator { position: absolute; top: 50%; left: -2px; transform: translateY(-50%); font-size: 8px; color: #fff; z-index: 35; pointer-events: none; font-weight: bold; background: #000; padding: 2px; border-radius: 2px; }
 
         /* INTERIOR DE LA CARTA */
         .card-header { padding-bottom: 1mm; margin-bottom: 1.5mm; text-align: center; position: relative; z-index: 10;} 
-        .card-title { font-size: 18px; font-weight: 900; text-transform: uppercase; line-height: 1.1; }
-        .card-subtitle { font-size: 10px; font-weight: bold; color: #444; text-transform: uppercase; }
+        .card-title { font-size: 18px; font-weight: 900; text-transform: uppercase; line-height: 1.1; transition: font-size 0.2s;}
+        .card-subtitle { font-size: 10px; font-weight: bold; color: #444; text-transform: uppercase; transition: font-size 0.2s; }
         
-        /* FRANJA DE PERSONALIDAD (MÁS DELGADA Y SUTIL) */
         .card-flavor-bar { width: 100%; height: 2.5mm; background-color: var(--bg-back); position: relative; overflow: hidden; border: 1px solid #1a1a1a; border-radius: 2px; margin-bottom: 2mm; box-shadow: inset 0 1px 2px rgba(0,0,0,0.3); flex-shrink: 0; z-index: 10;}
         
-        /* METADATOS (Tiempo, alcance, etc) */
-        .card-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5mm; font-size: 12px; margin-bottom: 2mm; line-height: 1.2; flex-shrink: 0; }
-        .card-meta strong { color: #000; display: block; font-size: 9.5px; text-transform: uppercase; border-bottom: 0.5px dotted #666; margin-bottom: 0.5px; }
+        .card-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5mm; font-size: 12px; margin-bottom: 2mm; line-height: 1.2; flex-shrink: 0; transition: all 0.2s;}
+        .card-meta strong { color: #000; display: block; font-size: 9.5px; text-transform: uppercase; border-bottom: 0.5px dotted #666; margin-bottom: 0.5px; transition: font-size 0.2s;}
         
-        .card-desc { font-size: 12px; text-align: justify; line-height: 1.35; overflow: hidden; flex-grow: 1; margin-bottom: 1mm; }
+        .card-desc { font-size: 12px; text-align: justify; line-height: 1.35; overflow: hidden; flex-grow: 1; flex-shrink: 1; min-height: 0; margin-bottom: 1mm; transition: all 0.2s; position: relative; }
+        /* Efecto de difuminado (fade) al final del texto para que no se vea cortado bruscamente */
+        .card-desc::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 4mm; background: linear-gradient(to bottom, transparent, var(--bg-paper)); pointer-events: none; }
+        .card-desc p { margin: 0 0 1.5mm 0; }
+        .card-desc p:last-child { margin-bottom: 0; }
+
+        /* NIVELES SUPERIORES (CONTENEDOR INDEPENDIENTE Y PROTEGIDO) */
+        .card-nav-sup { font-size: 11.5px; line-height: 1.25; overflow: hidden; flex-shrink: 0; text-align: justify; margin-bottom: 1.5mm; padding-top: 1mm; border-top: 1px dotted #888; background-color: var(--bg-paper); position: relative; z-index: 5; }
+        .card-nav-sup strong { color: #000; font-size: 10px; text-transform: uppercase; margin-right: 2px;}
+        /* El display inline evita saltos de línea molestos y ahorra espacio */
+        .card-nav-sup p { display: inline; margin: 0; }
         
-        /* FOOTER ANCLADO AL FONDO */
+        /* MEJORAS VISUALES ESPECÍFICAS PARA CARTAS DOBLES */
+        .spell-card.double-card .card-title { font-size: 21px; }
+        .spell-card.double-card .card-subtitle { font-size: 11px; margin-bottom: 2.5mm;}
+        .spell-card.double-card .card-meta { font-size: 13.5px; margin-bottom: 4mm; gap: 3mm; }
+        .spell-card.double-card .card-meta strong { font-size: 10.5px; }
+        .spell-card.double-card .card-desc { font-size: 13.5px; line-height: 1.45; }
+        .spell-card.double-card .card-desc p { margin: 0 0 3mm 0; }
+        .spell-card.double-card .card-nav-sup { font-size: 13px; line-height: 1.35; margin-top: 2mm; padding-top: 1.5mm; }
+        .spell-card.double-card .card-nav-sup strong { font-size: 11px; }
+
         .card-footer { display: flex; justify-content: space-between; font-size: 8.5px; color: #666; border-top: 1px solid #ccc; padding-top: 1mm; margin-top: auto; font-weight: bold; text-transform: uppercase; flex-shrink: 0; }
         .footer-classes { width: 70%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .footer-source { width: 30%; text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -137,13 +152,10 @@
 
         @media print {
             body { background: white !important; margin: 0; padding: 0; }
-            /* Quitamos .creator-ui de la lista de ocultos */
             .no-print, .top-bar, .ctrl-panel, .delete-card-btn, .fold-indicator { display: none !important; }
-            /* Cambiamos flex a block para que el navegador no corte mal las páginas */
             .creator-ui { display: block !important; margin: 0; padding: 0; max-width: none; }
             .preview-section, #printZone { display: block !important; width: 100%; }
             .a4-page { margin: 0 !important; box-shadow: none !important; border: none !important; page-break-after: always; page-break-inside: avoid; }
-            /* CRÍTICO: Fuerza al navegador a imprimir los colores de fondo y tramas */
             * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
             @page { size: A4 landscape; margin: 0; }
         }
@@ -168,7 +180,7 @@
              </div>
              <div class="flex-grow"></div>
              
-             <!-- CONTROLES TRAMA FONDO CARTA (NUEVO) -->
+             <!-- CONTROLES TRAMA FONDO CARTA -->
              <div class="flex items-center gap-1 ml-1">
                  <input type="file" id="cpatInput" accept="image/*" class="hidden" onchange="applyCardPattern(this)">
                  <button onclick="document.getElementById('cpatInput').click()" class="bg-indigo-600 text-white px-2 py-2 rounded-l shadow font-bold hover:bg-indigo-700 text-xs border-r border-indigo-800">TRAMA FONDO</button>
@@ -252,7 +264,6 @@
                     <div class="flex gap-2 mb-3 p-2 bg-gray-800 rounded border border-gray-600 flex-wrap">
                         <label class="flex items-center gap-1 text-xs font-bold cursor-pointer w-[45%]"><input type="checkbox" id="s_concentracion" class="w-3 h-3"> Conc.</label>
                         <label class="flex items-center gap-1 text-xs font-bold cursor-pointer w-[45%]"><input type="checkbox" id="s_ritual" class="w-3 h-3"> Ritual</label>
-                        <!-- NUEVO CHECKBOX PARA FORZAR CARTA DOBLE MANUALMENTE -->
                         <label class="flex items-center gap-1 text-xs font-bold cursor-pointer text-yellow-400 w-full mt-1"><input type="checkbox" id="s_carta_doble" class="w-3 h-3"> Forzar Carta Doble (Larga)</label>
                     </div>
 
@@ -260,14 +271,14 @@
                     <div class="form-group"><label>Fuente</label><input type="text" id="s_fuente"></div>
                     <div class="form-group"><label>Descripción</label><textarea id="s_descripcion"></textarea></div>
                     <div class="form-group"><label>Niveles Superiores</label><textarea id="s_niveles_superiores" style="height:40px;"></textarea></div>
-                    <button type="submit" class="btn mt-2">✚ Agregar</button>
+                    <button type="submit" class="btn mt-2 bg-green-600 hover:bg-green-700 w-full py-2 rounded text-white font-bold shadow transition-colors">✚ Agregar Hechizo</button>
                 </form>
             </div>
 
             <!-- CONTADOR -->
             <div class="mt-4 border-t border-gray-600 pt-4 text-center shrink-0">
                 <span class="text-xs text-gray-400 block mb-2">Cartas en la hoja: <span id="spellCount" class="font-bold text-white">0</span></span>
-                <button onclick="clearAll()" class="text-xs text-red-400 hover:text-red-300 underline font-bold cursor-pointer">Borrar todas las cartas</button>
+                <button onclick="clearAll()" class="text-xs text-red-400 hover:text-red-300 underline font-bold cursor-pointer bg-transparent border-none">Borrar todas las cartas</button>
             </div>
         </div>
 
@@ -296,7 +307,6 @@
         const updateVar = (name, val) => document.documentElement.style.setProperty(name, val);
         const changeTheme = (t) => { document.body.className = t === 'classic' ? 'theme-classic' : `theme-${t}`; };
 
-        // Mostrar/Ocultar paneles garantizando que solo uno se vea a la vez
         function togglePanel(id) {
             ['patternControls', 'cpatControls'].forEach(pid => {
                 if (pid !== id) {
@@ -402,14 +412,12 @@
             if (!filteredDb.length) return list.innerHTML = '<div class="text-center text-gray-500 text-xs mt-4">No hay resultados.</div>';
 
             filteredDb.forEach((s, i) => {
-                // 1. REVISAR CAMPOS FALTANTES (Advertencia Amarilla)
                 let missing = [];
                 ['nombre','nivel','escuela','tiempo_lanzamiento','alcance','componentes','duracion','clases','fuente','descripcion'].forEach(r => {
                     if (!s[r] || !String(s[r]).trim()) missing.push(r);
                 });
                 let warnYellow = missing.length > 0 ? `<span class="text-yellow-400 text-[10px] ml-1 cursor-help" title="Falta información: ${missing.join(', ')}">⚠️</span>` : '';
 
-                // 2. REVISAR PROBLEMAS DE FORMATO/LONGITUD (Alarma Roja)
                 let lengthIssues = [];
                 if (s.nombre && s.nombre.length > 35) lengthIssues.push('Título');
                 if (s.tiempo_lanzamiento && s.tiempo_lanzamiento.length > 45) lengthIssues.push('Tiempo');
@@ -436,12 +444,16 @@
 
         function processSpellText(spell) {
             const s = { ...spell };
-            if (s.descripcion) {
-                s.descripcion = s.descripcion.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<em>$1</em>');
-            }
-            if (s.niveles_superiores) {
-                s.niveles_superiores = s.niveles_superiores.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<em>$1</em>');
-            }
+            
+            const formatText = (txt) => {
+                if (!txt) return '';
+                let formatted = txt.split(/\n\n+/).map(p => `<p>${p.replace(/\n/g, '<br>')}</p>`).join('');
+                return formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<em>$1</em>');
+            };
+
+            s.descripcion = formatText(s.descripcion);
+            s.niveles_superiores = formatText(s.niveles_superiores);
+            
             return s;
         }
 
@@ -467,13 +479,34 @@
         const clearAll = () => { if(confirm('¿Borrar todas las cartas?')) { spells = []; render(); } };
         const removeSpell = (i) => { spells.splice(i, 1); render(); };
 
+        // Función auxiliar inteligente para calcular si una carta debe ser doble
+        function checkIsDouble(s) {
+            if (s.carta_doble) return true;
+            
+            let desc = s.descripcion || '';
+            let nav = s.niveles_superiores || '';
+            
+            // Retirar etiquetas HTML para contar caracteres puros
+            let textLength = desc.replace(/<[^>]+>/g, '').length + nav.replace(/<[^>]+>/g, '').length;
+            
+            // Contar el número de párrafos. Cada párrafo suma tamaño "visual" extra.
+            let pCount = (desc.match(/<p>/g) || []).length;
+            
+            // Un párrafo equivale a unos 50 caracteres extra de peso visual
+            let visualWeight = textLength + (pCount * 50);
+            
+            // Dar peso extra si existe la caja de "niveles superiores" (ya que la propia caja ocupa espacio)
+            if (nav.length > 5) visualWeight += 60;
+            
+            // Si el peso visual pasa de 850, es mejor hacerla doble para que no se corte
+            return visualWeight > 850;
+        }
+
         function previewSpell(i) {
             const s = processSpellText(filteredDb[i]);
-            let totalLen = (s.descripcion || '').length + (s.niveles_superiores || '').length;
-            let isDouble = s.carta_doble || totalLen > 700;
+            let isDouble = checkIsDouble(s);
             
             const pCard = document.getElementById('previewCard');
-            // Ajustamos la altura de la vista previa dependiendo si es normal o doble
             pCard.style.height = isDouble ? '210mm' : '105mm'; 
             pCard.innerHTML = genCardHTML(s, null, isDouble);
             togglePreview();
@@ -481,7 +514,12 @@
 
         function genCardHTML(s, idx, isDouble) {
             let sub = `${s.nivel == 0 ? 'Truco' : `Nivel ${s.nivel}`} de ${s.escuela}`; if (s.ritual) sub += " (Ritual)";
-            let navSup = s.niveles_superiores; let showNavSup = navSup && navSup.toLowerCase().trim() !== "no" && navSup.trim() !== "";
+            
+            // Lógica sólida para ocultar "Niveles Superiores" solo si está vacío o dice "no" o "-"
+            let navSupRaw = s.niveles_superiores || '';
+            let cleanNav = navSupRaw.replace(/<[^>]+>/g, '').toLowerCase().trim();
+            let showNavSup = cleanNav !== "" && cleanNav !== "no" && cleanNav !== "-" && cleanNav !== "ninguno";
+
             let doubleClass = isDouble ? 'double-card' : '';
             
             return `
@@ -489,12 +527,9 @@
                 ${idx !== null ? `<button class="delete-card-btn" onclick="removeSpell(${idx})">✕</button>` : ''}
                 ${isDouble ? `<div class="fold-indicator no-print">DOBLEZ</div>` : ''}
                 
-                <!-- TRAMA DEL REVERSO (PARA EL MARCO EXTERIOR) -->
                 <div class="pattern-layer"><div class="pat-split pat-odd"></div><div class="pat-split pat-even"></div></div>
                 
-                <!-- CONTENIDO INTERNO DE LA CARTA ("EL PAPIRO") -->
                 <div class="card-content">
-                    <!-- TRAMA DEL FONDO DE LA CARTA -->
                     <div class="card-pattern-layer"><div class="cpat-split cpat-odd"></div><div class="cpat-split cpat-even"></div></div>
                     
                     <div class="card-header font-title"><div class="card-title">${s.nombre || '-'}</div>${s.nombre_en ? `<div class="card-subtitle font-body text-[8.5px] text-gray-500">${s.nombre_en}</div>` : ''}<div class="card-subtitle font-body mt-0.5">${sub}</div></div>
@@ -503,7 +538,11 @@
                     
                     <div class="card-meta font-body"><div><strong>Tiempo</strong>${s.tiempo_lanzamiento || '-'}</div><div><strong>Alcance</strong>${s.alcance || '-'}</div><div><strong>Componentes</strong>${s.componentes || '-'}</div><div><strong>Duración</strong>${s.concentracion ? '<span style="background:black;color:white;border-radius:50%;width:12px;height:12px;display:inline-block;text-align:center;font-size:9px;line-height:12px;margin-right:3px;">C</span>' : ''}${s.duracion || '-'}</div></div>
                     
-                    <div class="card-desc font-body">${s.descripcion || '<span class="text-gray-400 italic">Sin descripción...</span>'}${showNavSup ? `<div class="mt-2 pt-1 border-t border-dotted border-gray-400"><strong>Superiores:</strong> ${navSup}</div>` : ''}</div>
+                    <!-- DIV 1: Descripción principal (se ocultará el final si es demasiado largo) -->
+                    <div class="card-desc font-body">${s.descripcion || '<span class="text-gray-400 italic">Sin descripción...</span>'}</div>
+                    
+                    <!-- DIV 2: Niveles superiores (Nunca se cortará porque tiene flex-shrink: 0) -->
+                    ${showNavSup ? `<div class="card-nav-sup font-body"><strong>Superiores:</strong> ${navSupRaw}</div>` : ''}
                     
                     <div class="card-footer font-body"><div class="footer-classes">${s.clases || '-'}</div><div class="footer-source">${s.fuente || '-'}</div></div>
                 </div>
@@ -518,7 +557,7 @@
 
             let pages = [];
             let currentChunk = [];
-            let c1 = 0, c2 = 0, c3 = 0; // Contadores de capacidad por columna (Máx 2 por columna)
+            let c1 = 0, c2 = 0, c3 = 0;
 
             const pushPage = () => {
                 if(currentChunk.length > 0) pages.push(currentChunk);
@@ -526,12 +565,8 @@
                 c1 = 0; c2 = 0; c3 = 0;
             };
 
-            // Lógica de empaquetado denso para cuadrícula
             spells.forEach((s, idx) => {
-                let totalLen = (s.descripcion || '').length + (s.niveles_superiores || '').length;
-                let isDouble = s.carta_doble || totalLen > 700;
-                
-                // Guardamos sus datos para el renderizado
+                let isDouble = checkIsDouble(s);
                 let cardData = { spell: s, index: idx, double: isDouble };
 
                 if (isDouble) {
@@ -554,7 +589,6 @@
             });
             pushPage();
 
-            // Dibujar las páginas calculadas
             pages.forEach((chunk, pageIndex) => {
                 let pageDiv = document.createElement('div'); 
                 pageDiv.className = 'a4-page';
