@@ -540,8 +540,8 @@
         "ritual": false,
         "clases": "Clérigo, Paladín",
         "fuente": "Manual del Jugador 2024",
-        "descripcion": "",
-        "niveles_superiores": ""
+        "descripcion": "Bendices hasta tres criaturas dentro del alcance. Siempre que un objetivo realice una tirada de ataque o una tirada de salvación antes de que termine el conjuro, añade **1d4** a la tirada de ataque o salvación.",
+        "niveles_superiores": "Puedes seleccionar una criatura adicional por cada nivel de espacio de conjuro superior a 1."
     },
     {
         "nombre": "Boca mágica",
@@ -828,8 +828,8 @@
         "ritual": false,
         "clases": "Paladín",
         "fuente": "Manual del Jugador 2024",
-        "descripcion": "",
-        "niveles_superiores": ""
+        "descripcion": "Tu golpe resuena con un trueno audible en un radio de **27 metros (90 ft)**, y el objetivo recibe **2d6** de daño de trueno adicional. Además, si el objetivo es una criatura, debe superar una tirada de salvación de Fuerza o ser empujado **3 metros (10 ft)** lejos de ti y tener el estado de Derribado.",
+        "niveles_superiores": "El daño aumenta en **1d6** por cada nivel de espacio de conjuro superior a 1."
     },
     {
         "nombre": "Castigo brillante",
@@ -1724,8 +1724,8 @@
         "ritual": false,
         "clases": "Hechicero, Mago",
         "fuente": "Manual del Jugador 2024",
-        "descripcion": "",
-        "niveles_superiores": ""
+        "descripcion": "Lanzas una mota de fuego a una criatura u objeto dentro del alcance. Realiza un ataque de conjuro a distancia contra el objetivo. Si acierta, el objetivo recibe **1d10** de daño de fuego. Un objeto inflamable alcanzado por este conjuro empieza a arder si nadie lo lleva.",
+        "niveles_superiores": "El daño aumenta en **1d10** al alcanzar los niveles 5 (**2d10**), 11 (**3d10**) y 17 (**4d10**)."
     },
     {
         "nombre": "Descarga sobrenatural",
@@ -2460,8 +2460,8 @@
         "ritual": false,
         "clases": "Hechicero",
         "fuente": "Manual del Jugador 2024",
-        "descripcion": "",
-        "niveles_superiores": ""
+        "descripcion": "Lanzas energía hechicera a una criatura u objeto dentro del alcance. Realiza una tirada de ataque a distancia contra el objetivo. Si acierta, el objetivo recibe **1d8** de daño de un tipo que elijas: ácido, frío, fuego, relámpago, veneno, psíquico o trueno.\nSi sacas un **8** en un **d8** de este conjuro, puedes tirar otro **d8** y añadirlo al daño. Al lanzar este conjuro, el número máximo de estos **d8** que puedes añadir al daño del conjuro es igual a tu modificador por aptitud mágica.",
+        "niveles_superiores": "Este daño aumenta en **1d8** al alcanzar el nivel 5 (**2d8**), 11 (**3d8**) y 17 (**4d8**)."
     },
     {
         "nombre": "Estática sináptica",
@@ -3820,8 +3820,8 @@
         "ritual": false,
         "clases": "Hechicero, Mago",
         "fuente": "Manual del Jugador 2024",
-        "descripcion": "",
-        "niveles_superiores": ""
+        "descripcion": "Una fina cortina de llamas sale disparada de ti. Cada criatura en un Cono de **4,50 metros (15 ft)** realiza una tirada de salvación de Destreza, recibiendo **3d6** de daño de fuego si falla o la mitad si la supera.\nLos objetos inflamables en el cono que no se llevan puestos empiezan a arder.",
+        "niveles_superiores": "El daño aumenta en **1d6** por cada nivel de espacio de conjuro superior a 1."
     },
     {
         "nombre": "Mansión magnífica de Mordenkainen",
@@ -4252,8 +4252,8 @@
         "ritual": false,
         "clases": "Hechicero, Mago",
         "fuente": "Manual del Jugador 2024",
-        "descripcion": "",
-        "niveles_superiores": ""
+        "descripcion": "Lanzas un orbe de energía a un objetivo dentro del alcance. Elige ácido, frío, fuego, relámpago, veneno o trueno como tipo de orbe que crees y realiza un ataque de conjuro a distancia contra el objetivo. Si cierta, el objetivo recibe **3d8** de daño del tipo elegido.\nSi obtienes el mismo número en dos o más **d8**, el orbe salta a un objetivo diferente de tu elección en un radio de **9 metros (30 ft)** del objetivo. Realiza una tirada de ataque contra el nuevo objetivo y una nueva tirada de daño. El orbe no puede volver a saltar a menos que lances el conjuro con un espacio de conjuro de nivel 2 o superior.",
+        "niveles_superiores": "El daño aumenta en **1d8** por cada nivel de espacio de conjuro superior a 1. El orbe puede saltar un número máximo de veces igual al nivel del espacio gastado, y una criatura solo puede ser objetivo una vez por cada lanzamiento de este conjuro."
     },
     {
         "nombre": "Orden imperiosa",
@@ -4748,7 +4748,7 @@
         "ritual": false,
         "clases": "Bardo, Hechicero, Brujo, Mago",
         "fuente": "Manual del Jugador 2024",
-        "descripcion": "",
+        "descripcion": "Creas un efecto mágico dentro del alcance. Elige el efecto entre las opciones a continuación. Si lanzas este conjuro varias veces, puedes tener activos hasta tres de sus efectos no instantáneos a la vez.\n**Efecto Sensorial.** Creas un efecto sensorial instantáneo e inofensivo, como una lluvia de chispas, una ráfaga de viento, tenues notas musicales o un olor extraño.\n**Juego con fuego.** Enciendes o apagas instantáneamente una vela, una antorcha o una pequeña fogata.\n**Limpiar o ensuciar.** Limpias o ensucias instantáneamente un objeto de no más **0,03 m3 (1 cubic foot)**.\n**Sensación menor.** Enfrías, calientas o aromatizas hasta un volumen de **0,03 m3 (1 cubic foot)** de material inerte durante 1 hora.\n**Marca mágica.** Haces que un color, una pequeña marca o un símbolo aparezcan en un objeto o superficie durante 1 hora.\n**Creación menor.** Creas un abalorio no mágico o una imagen ilusoria que cabe en tu mano. Dura hasta el final de tu siguiente turno. Un abalorio no inflige daño ni tiene valor monetario.",
         "niveles_superiores": ""
     },
     {
@@ -4972,8 +4972,8 @@
         "ritual": false,
         "clases": "Hechicero, Mago",
         "fuente": "Manual del Jugador 2024",
-        "descripcion": "",
-        "niveles_superiores": ""
+        "descripcion": "Un rayo gélido de luz azul blanquecina se dirige hacia una criatura dentro del alcance. Realiza un ataque de conjuro a distancia contra el objetivo. Si acierta, recibe **1d8** de daño de frío y su velocidad se reduce en **3 metros (10 ft)** hasta el comienzo de tu siguiente turno.",
+        "niveles_superiores": "El daño aumenta en **1d8** al alcanzar los niveles 5 (**2d8**), 11 (**3d8**) y 17 (**4d8**)."
     },
     {
         "nombre": "Rayo de hechicería",
@@ -6332,8 +6332,8 @@
         "ritual": false,
         "clases": "Artífice, Hechicero, Brujo, Mago",
         "fuente": "El Caldero de Tasha para Todo",
-        "descripcion": "",
-        "niveles_superiores": ""
+        "descripcion": "Blandes el arma utilizada para lanzar el conjuro y haces con ella un ataque cuerpo a cuerpo contra una criatura que esté a **1,50 metros (5 ft)** o menos de ti. Si impacta, el objetivo sufre los efectos normales del ataque con arma y luego queda envuelto en una energía explosiva hasta el principio de tu siguiente turno. Si el objetivo se mueve voluntariamente **1,50 metros (5 ft)** o más antes de ese momento, recibe **1d8** de daño de trueno y el conjuro termina.",
+        "niveles_superiores": "El daño de este conjuro aumenta cuando alcanzas ciertos niveles. En el nivel 5, el ataque cuerpo a cuerpo causa **1d8** de daño de trueno adicional al objetivo si impacta, y el daño que este recibe por moverse aumenta a **2d8**. Las dos tiradas de daño aumentan en **1d8** en el nivel 11 (**2d8** y **3d8**) y en el nivel 17 (**3d8** y **4d8**)."
     },
     {
         "nombre": "Filo de llamas verdes",
