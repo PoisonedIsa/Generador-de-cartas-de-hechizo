@@ -12,10 +12,7 @@
         "ritual": false,
         "clases": "Bardo, Hechicero, Mago",
         "fuente": "Manual del Jugador 2024",
-        "descripcion": "Elige un objeto que puedas ver dentro del alcance. El objeto puede ser una puerta, una caja, un cofre, unas esposas, un candado u otro objeto que contenga un mecanismo mundano o mágico que impida el acceso.
-Un objetivo que se mantiene cerrado por una cerradura normal, o que está atascado o bloqueado, se abre, se desatasca o se desbloquea. Si el objeto tiene varias cerraduras, solo una se desbloquea.
-Si el objetivo se mantiene cerrado por cerradura arcana, ese conjuro se cancela durante 10 minutos, durante los cuales el objetivo puede abrirse y cerrarse.
-Al lanzar el conjuro, un fuerte golpe, audible a 90 metros de distancia, emana del objetivo.",
+        "descripcion": "Elige un objeto que puedas ver dentro del alcance. El objeto puede ser una puerta, una caja, un cofre, unas esposas, un candado u otro objeto que contenga un mecanismo mundano o mágico que impida el acceso.Un objetivo que se mantiene cerrado por una cerradura normal, o que está atascado o bloqueado, se abre, se desatasca o se desbloquea. Si el objeto tiene varias cerraduras, solo una se desbloquea.Si el objetivo se mantiene cerrado por cerradura arcana, ese conjuro se cancela durante 10 minutos, durante los cuales el objetivo puede abrirse y cerrarse.Al lanzar el conjuro, un fuerte golpe, audible a 90 metros de distancia, emana del objetivo.",
         "niveles_superiores": ""
     },
     {
