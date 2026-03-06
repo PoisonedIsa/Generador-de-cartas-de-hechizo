@@ -131,8 +131,14 @@
 
         @media print {
             body { background: white !important; margin: 0; padding: 0; }
-            .no-print, .creator-ui, .top-bar, .ctrl-panel, .delete-card-btn, .fold-indicator { display: none !important; }
-            .a4-page { margin: 0 !important; box-shadow: none !important; border: none !important; page-break-after: always; }
+            /* Quitamos .creator-ui de la lista de ocultos */
+            .no-print, .top-bar, .ctrl-panel, .delete-card-btn, .fold-indicator { display: none !important; }
+            /* Cambiamos flex a block para que el navegador no corte mal las páginas */
+            .creator-ui { display: block !important; margin: 0; padding: 0; max-width: none; }
+            .preview-section, #printZone { display: block !important; width: 100%; }
+            .a4-page { margin: 0 !important; box-shadow: none !important; border: none !important; page-break-after: always; page-break-inside: avoid; }
+            /* CRÍTICO: Fuerza al navegador a imprimir los colores de fondo y tramas */
+            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
             @page { size: A4 landscape; margin: 0; }
         }
     </style>
