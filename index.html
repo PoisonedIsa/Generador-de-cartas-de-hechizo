@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Cartas de Hechizos D&D</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Roboto+Condensed:wght@300;400;700&family=MedievalSharp&family=Patrick+Hand&display=swap" rel="stylesheet">
+    <style>
+        :root { 
+            --border-thick: 2px solid #1a1a1a; --border-thin: 1px solid #444; 
+            --border-outer: 2px dashed #555; --border-inner: 1.5px solid #1a1a1a;
+            --bg-paper: #fdfbf7; --bg-back: #4a235a; 
+            --font-title: 'Cinzel', serif; --font-body: 'Roboto Condensed', sans-serif;
+            
+            /* VARIABLES TRAMA REVERSO / FRANJA */
+            --pat-opacity: 1; --pat-size: 150px; --pat-contrast: 1; --pat-rotation: 0deg; --pat-blend: multiply; --pat-offset-a: 0px; --pat-offset-b: 0px; --pat-image: none;
+            
+            /* VARIABLES TRAMA FONDO CARTA */
+            --cpat-opacity: 1; --cpat-size: 150px; --cpat-contrast: 1; --cpat-rotation: 0deg; --cpat-blend: multiply; --cpat-offset-a: 0px; --cpat-offset-b: 0px; --cpat-image: none;
+        }
+        
+        body.theme-gothic { --border-thick: 2px solid #000; --border-outer: 2.5px dotted #000; --border-inner: 2px solid #000; --bg-paper: #f0eee6; --font-title: 'MedievalSharp', cursive; --font-body: 'MedievalSharp', cursive; }
+        body.theme-doodle { --border-thick: 2px dashed #444; --border-outer: 2px dashed #999; --border-inner: 2px dashed #444; --bg-paper: #fff; --font-title: 'Patrick Hand', cursive; --font-body: 'Patrick Hand', cursive; }
+
+        body { font-family: var(--font-body); background-color: #222; margin: 0; padding: 0; }
+        .font-title { font-family: var(--font-title); }
+        .font-body { font-family: var(--font-body); }
+
+        /* TRAMA REVERSO / FRANJA */
+        .pattern-layer { position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; z-index: 0; pointer-events: none; opacity: var(--pat-opacity); transform: rotate(var(--pat-rotation)); filter: contrast(var(--pat-contrast)); mix-blend-mode: var(--pat-blend); display: block; }
+        .pat-split { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-repeat: repeat; background-position: center; background-size: var(--pat-size); background-image: var(--pat-image); }
+        .pat-odd { -webkit-mask-image: repeating-linear-gradient(to bottom, black 0, black var(--pat-size), transparent var(--pat-size), transparent calc(var(--pat-size) * 2)); mask-image: repeating-linear-gradient(to bottom, black 0, black var(--pat-size), transparent var(--pat-size), transparent calc(var(--pat-size) * 2)); transform: translateX(var(--pat-offset-a)); }
+        .pat-even { -webkit-mask-image: repeating-linear-gradient(to bottom, transparent 0, transparent var(--pat-size), black var(--pat-size), black calc(var(--pat-size) * 2)); mask-image: repeating-linear-gradient(to bottom, transparent 0, transparent var(--pat-size), black var(--pat-size), black calc(var(--pat-size) * 2)); transform: translateX(var(--pat-offset-b)); }
+        
+        /* TRAMA FONDO CARTA */
+        .card-pattern-layer { position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; z-index: 0; pointer-events: none; opacity: var(--cpat-opacity); transform: rotate(var(--cpat-rotation)); filter: contrast(var(--cpat-contrast)); mix-blend-mode: var(--cpat-blend); display: block; }
+        .cpat-split { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-repeat: repeat; background-position: center; background-size: var(--cpat-size); background-image: var(--cpat-image); }
+        .cpat-odd { -webkit-mask-image: repeating-linear-gradient(to bottom, black 0, black var(--cpat-size), transparent var(--cpat-size), transparent calc(var(--cpat-size) * 2)); mask-image: repeating-linear-gradient(to bottom, black 0, black var(--cpat-size), transparent var(--cpat-size), transparent calc(var(--cpat-size) * 2)); transform: translateX(var(--cpat-offset-a)); }
+        .cpat-even { -webkit-mask-image: repeating-linear-gradient(to bottom, transparent 0, transparent var(--cpat-size), black var(--cpat-size), black calc(var(--cpat-size) * 2)); mask-image: repeating-linear-gradient(to bottom, transparent 0, transparent var(--cpat-size), black var(--cpat-size), black calc(var(--cpat-size) * 2)); transform: translateX(var(--cpat-offset-b)); }
+
+        /* HOJAS Y CARTAS (AGREGADO AUTO-FLOW COLUMN DENSE PARA EMPAQUETAR BIEN LAS CARTAS DOBLES) */
+        .a4-page { width: 297mm; height: 210mm; background: white; margin: 0 auto 20px auto; box-shadow: 0 4px 15px rgba(0,0,0,0.5); display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 1fr); grid-auto-flow: column dense; gap: 0; page-break-after: always; box-sizing: border-box; position: relative; overflow: hidden; }
+        
+        .spell-card { 
+            width: 100%; height: 100%; 
+            background-color: var(--bg-paper); border: var(--border-outer); 
+            position: relative; overflow: hidden; display: flex; flex-direction: column; 
+            box-sizing: border-box; 
+            padding: 5.5mm 6.5mm; 
+            transition: background-color 0.3s; 
+        }
+        
+        /* CARTA DOBLE (TOMA 2 FILAS DE ALTO) */
+        .spell-card.double-card {
+            grid-row: span 2;
+        }
+
+        /* LÍNEA DE DOBLEZ PARA LA CARTA DOBLE */
+        .spell-card.double-card::before {
+            content: '';
+            position: absolute;
+            top: 50%; left: 0; right: 0;
+            border-top: 1.5px dashed rgba(0,0,0,0.4);
+            z-index: 20;
+            pointer-events: none;
+        }
+
+        /* MARCO INTERIOR SÓLIDO */
+        .spell-card::after {
+            content: '';
+            position: absolute;
+            top: 2.5mm; left: 2.5mm; right: 2.5mm; bottom: 2.5mm;
+            border: var(--border-inner);
+            pointer-events: none;
+            z-index: 5;
+        }
+        
+        /* Ignorar el fondo y botones en el apilamiento */
+        .spell-card > *:not(.card-pattern-layer):not(.delete-card-btn):not(.fold-indicator) { position: relative; z-index: 10; }
+        
+        /* INDICADOR VISUAL DE DOBLEZ (SOLO PANTALLA) */
+        .fold-indicator { position: absolute; top: 50%; left: -2px; transform: translateY(-50%); font-size: 8px; color: #888; z-index: 25; pointer-events: none; font-weight: bold; background: var(--bg-paper); padding: 2px; }
+
+        /* INTERIOR DE LA CARTA */
+        .card-header { padding-bottom: 1mm; margin-bottom: 1.5mm; text-align: center; } 
+        .card-title { font-size: 16px; font-weight: 900; text-transform: uppercase; line-height: 1.1; }
+        .card-subtitle { font-size: 9px; font-weight: bold; color: #444; text-transform: uppercase; }
+        
+        /* FRANJA DE PERSONALIDAD */
+        .card-flavor-bar { width: 100%; height: 6mm; background-color: var(--bg-back); position: relative; overflow: hidden; border: 1px solid #1a1a1a; border-radius: 2px; margin-bottom: 2mm; box-shadow: inset 0 1px 2px rgba(0,0,0,0.3); flex-shrink: 0; }
+        
+        /* METADATOS (Tiempo, alcance, etc) */
+        .card-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5mm; font-size: 10.5px; margin-bottom: 2mm; line-height: 1.2; flex-shrink: 0; }
+        .card-meta strong { color: #000; display: block; font-size: 8.5px; text-transform: uppercase; border-bottom: 0.5px dotted #666; margin-bottom: 0.5px; }
+        
+        .card-desc { font-size: 10.5px; text-align: justify; line-height: 1.35; overflow: hidden; flex-grow: 1; margin-bottom: 1mm; }
+        
+        /* FOOTER ANCLADO AL FONDO */
+        .card-footer { display: flex; justify-content: space-between; font-size: 7px; color: #666; border-top: 1px solid #ccc; padding-top: 1mm; margin-top: auto; font-weight: bold; text-transform: uppercase; flex-shrink: 0; }
+        .footer-classes { width: 70%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .footer-source { width: 30%; text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        
+        .universal-back { background-color: var(--bg-back) !important; display: flex; }
+        
+        /* CONTROLES FLOTANTES */
+        .ctrl-panel { display: none; position: fixed; top: 60px; right: 20px; width: 280px; z-index: 9999; background: #222; border: 1px solid #444; border-radius: 8px; padding: 12px; color: white; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        .ctrl-group label { font-size: 11px; text-transform: uppercase; color: #aaa; display: block; margin-bottom: 2px; }
+        .ctrl-group input[type="range"] { width: 100%; margin-bottom: 8px; accent-color: #8b5cf6; cursor: pointer; }
+
+        /* UI */
+        .creator-ui { display: flex; max-width: 1400px; margin: 20px auto; gap: 20px; padding: 0 20px; align-items: flex-start; }
+        .sidebar-section { background: #333; padding: 20px; border-radius: 8px; width: 350px; flex-shrink: 0; color: white; position: sticky; top: 80px; height: calc(100vh - 100px); display: flex; flex-direction: column; }
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; font-size: 12px; font-weight: bold; margin-bottom: 4px; color: #ccc; text-transform: uppercase; }
+        .form-group input, .form-group textarea, .form-group select { width: 100%; background: #222; border: 1px solid #555; color: white; padding: 8px; border-radius: 4px; font-size: 14px; }
+        
+        /* BOTONES UI */
+        .tab-btn { flex: 1; padding: 8px; text-align: center; cursor: pointer; font-size: 12px; font-weight: bold; text-transform: uppercase; transition: 0.2s; border-radius: 4px; }
+        .tab-btn.active { background: #8b5cf6; color: white; }
+        .tab-btn.inactive { background: #444; color: #aaa; }
+        
+        .db-result-item { background: #222; border: 1px solid #444; border-radius: 4px; padding: 10px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+        .action-btn { width: 28px; height: 28px; border-radius: 50%; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; border: none; color: white; }
+        .btn-add { background: #10b981; } .btn-add:hover { background: #059669; transform: scale(1.1); }
+        .btn-view { background: #3b82f6; } .btn-view:hover { background: #2563eb; transform: scale(1.1); }
+        
+        .delete-card-btn { position: absolute; top: 5px; right: 5px; background: #ef4444; color: white; border: none; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; cursor: pointer; z-index: 50; opacity: 0.2; transition: 0.2s; }
+        .spell-card:hover .delete-card-btn { opacity: 1; }
+        .delete-card-btn:hover { background: #b91c1c; }
+
+        @media print {
+            body { background: white !important; margin: 0; padding: 0; }
+            .no-print, .creator-ui, .top-bar, .ctrl-panel, .delete-card-btn, .fold-indicator { display: none !important; }
+            .a4-page { margin: 0 !important; box-shadow: none !important; border: none !important; page-break-after: always; }
+            @page { size: A4 landscape; margin: 0; }
+        }
+    </style>
+</head>
+<body class="theme-classic">
+
+    <!-- BARRA SUPERIOR -->
+    <div class="top-bar no-print sticky top-0 z-50 w-full bg-[#222] border-b border-gray-600 shadow-xl py-3 flex justify-center items-center">
+         <div class="w-full max-w-6xl flex gap-2 items-center px-4 overflow-x-auto">
+             <div class="flex gap-2 bg-gray-800 p-1 rounded border border-gray-600 items-center">
+                 <span class="text-white text-xs font-bold px-1">ESTILO:</span>
+                 <select onchange="changeTheme(this.value)" class="bg-gray-700 text-white text-sm rounded border border-gray-500 px-2 py-1 cursor-pointer"><option value="classic">Clásico</option><option value="gothic">Gótico</option><option value="doodle">Doodle</option></select>
+             </div>
+             <div class="flex gap-2 bg-gray-800 p-1 rounded border border-gray-600 items-center ml-1">
+                 <span class="text-white text-xs font-bold px-1">PAPEL:</span>
+                 <input type="color" id="globalColorPicker" value="#fdfbf7" onchange="updateVar('--bg-paper', this.value)" class="w-8 h-6 p-0 border-0 rounded cursor-pointer">
+             </div>
+             <div class="flex gap-2 bg-gray-800 p-1 rounded border border-gray-600 items-center ml-1">
+                 <span class="text-white text-xs font-bold px-1">REVERSO:</span>
+                 <input type="color" value="#4a235a" onchange="updateVar('--bg-back', this.value)" class="w-8 h-6 p-0 border-0 rounded cursor-pointer">
+             </div>
+             <div class="flex-grow"></div>
+             
+             <!-- CONTROLES TRAMA FONDO CARTA (NUEVO) -->
+             <div class="flex items-center gap-1 ml-1">
+                 <input type="file" id="cpatInput" accept="image/*" class="hidden" onchange="applyCardPattern(this)">
+                 <button onclick="document.getElementById('cpatInput').click()" class="bg-indigo-600 text-white px-2 py-2 rounded-l shadow font-bold hover:bg-indigo-700 text-xs border-r border-indigo-800">TRAMA FONDO</button>
+                 <button onclick="togglePanel('cpatControls')" class="bg-indigo-800 text-white px-2 py-2 rounded-r shadow hover:bg-indigo-900 text-xs" title="Ajustes Trama Carta">⚙️</button>
+             </div>
+
+             <!-- CONTROLES TRAMA REVERSO -->
+             <div class="flex items-center gap-1 ml-1">
+                 <input type="file" id="patternInput" accept="image/*" class="hidden" onchange="applyPattern(this)">
+                 <button onclick="document.getElementById('patternInput').click()" class="bg-purple-600 text-white px-2 py-2 rounded-l shadow font-bold hover:bg-purple-700 text-xs border-r border-purple-800">TRAMA REVERSO</button>
+                 <button onclick="togglePanel('patternControls')" class="bg-purple-800 text-white px-2 py-2 rounded-r shadow hover:bg-purple-900 text-xs" title="Ajustes Trama Reverso/Franja">⚙️</button>
+             </div>
+
+             <button onclick="window.print()" class="bg-blue-600 text-white px-4 py-2 rounded shadow font-bold hover:bg-blue-700 text-xs ml-3">IMPRIMIR CARTAS</button>
+         </div>
+    </div>
+
+    <!-- PANEL DE TRAMA FONDO CARTA -->
+    <div id="cpatControls" class="ctrl-panel ctrl-group no-print">
+        <h3 class="text-white font-bold text-sm mb-3 border-b border-gray-600 pb-1 flex justify-between">AJUSTES TRAMA FONDO<button onclick="togglePanel('cpatControls')" class="text-gray-400 hover:text-white">✕</button></h3>
+        <label>Opacidad</label><input type="range" min="0" max="1" step="0.05" value="1" oninput="updateVar('--cpat-opacity', this.value)">
+        <label>Tamaño</label><input type="range" min="20" max="800" step="10" value="150" oninput="updateVar('--cpat-size', this.value + 'px')">
+        <label>Offset A</label><input type="range" min="0" max="200" step="1" value="0" oninput="updateVar('--cpat-offset-a', this.value + 'px')">
+        <label>Offset B</label><input type="range" min="0" max="200" step="1" value="0" oninput="updateVar('--cpat-offset-b', this.value + 'px')">
+        <label>Contraste</label><input type="range" min="0.5" max="4" step="0.1" value="1" oninput="updateVar('--cpat-contrast', this.value)">
+        <label>Rotación</label><input type="range" min="0" max="90" step="1" value="0" oninput="updateVar('--cpat-rotation', this.value + 'deg')">
+        <select onchange="updateVar('--cpat-blend', this.value)" class="w-full bg-gray-700 text-xs p-1 rounded border border-gray-500 text-white mt-2"><option value="multiply" selected>Multiplicar</option><option value="normal">Normal</option><option value="overlay">Superponer</option></select>
+    </div>
+
+    <!-- PANEL DE TRAMA REVERSO -->
+    <div id="patternControls" class="ctrl-panel ctrl-group no-print">
+        <h3 class="text-white font-bold text-sm mb-3 border-b border-gray-600 pb-1 flex justify-between">AJUSTES TRAMA REVERSO<button onclick="togglePanel('patternControls')" class="text-gray-400 hover:text-white">✕</button></h3>
+        <label>Opacidad</label><input type="range" min="0" max="1" step="0.05" value="1" oninput="updateVar('--pat-opacity', this.value)">
+        <label>Tamaño</label><input type="range" min="20" max="800" step="10" value="150" oninput="updateVar('--pat-size', this.value + 'px')">
+        <label>Offset A</label><input type="range" min="0" max="200" step="1" value="0" oninput="updateVar('--pat-offset-a', this.value + 'px')">
+        <label>Offset B</label><input type="range" min="0" max="200" step="1" value="0" oninput="updateVar('--pat-offset-b', this.value + 'px')">
+        <label>Contraste</label><input type="range" min="0.5" max="4" step="0.1" value="1" oninput="updateVar('--pat-contrast', this.value)">
+        <label>Rotación</label><input type="range" min="0" max="90" step="1" value="0" oninput="updateVar('--pat-rotation', this.value + 'deg')">
+        <select onchange="updateVar('--pat-blend', this.value)" class="w-full bg-gray-700 text-xs p-1 rounded border border-gray-500 text-white mt-2"><option value="multiply" selected>Multiplicar</option><option value="normal">Normal</option><option value="overlay">Superponer</option></select>
+    </div>
+
+    <!-- INTERFAZ PRINCIPAL -->
+    <div class="creator-ui">
+        
+        <!-- BARRA LATERAL -->
+        <div class="sidebar-section no-print">
+            <h2 class="text-xl font-bold mb-4 border-b border-gray-600 pb-2 font-title text-center">Gestor de Hechizos</h2>
+            
+            <div class="flex gap-2 mb-4 bg-gray-800 p-1 rounded border border-gray-600 shrink-0">
+                <div id="tabBtnDB" class="tab-btn active" onclick="switchTab('db')">Base de Datos</div>
+                <div id="tabBtnManual" class="tab-btn inactive" onclick="switchTab('manual')">Manual</div>
+            </div>
+
+            <!-- TAB: BASE DE DATOS -->
+            <div id="viewDB" class="flex flex-col flex-grow min-h-0">
+                <div class="flex flex-col gap-2 mb-4 shrink-0">
+                    <input type="text" id="filterName" placeholder="Buscar hechizo..." class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm text-white outline-none" oninput="filterDB()">
+                    <div class="flex gap-2">
+                        <div class="w-1/2 flex gap-1 items-center">
+                            <select id="filterLvlMin" class="w-full bg-gray-900 border border-gray-600 rounded p-1.5 text-[11px] text-white outline-none" onchange="filterDB()"><option value="">Mín</option></select>
+                            <span class="text-gray-400 text-xs">-</span>
+                            <select id="filterLvlMax" class="w-full bg-gray-900 border border-gray-600 rounded p-1.5 text-[11px] text-white outline-none" onchange="filterDB()"><option value="">Máx</option></select>
+                        </div>
+                        <select id="filterClass" class="w-1/2 bg-gray-900 border border-gray-600 rounded p-1.5 text-[11px] text-white outline-none" onchange="filterDB()"><option value="">Clases</option></select>
+                    </div>
+                    <select id="filterSource" class="w-full bg-gray-900 border border-gray-600 rounded p-1.5 text-xs text-white outline-none" onchange="filterDB()"><option value="">Fuentes</option></select>
+                    <div class="text-[10px] text-gray-400 text-right mt-1 font-bold" id="dbStatus">Cargando...</div>
+                </div>
+                <div id="dbResultsList" class="flex-grow overflow-y-auto pr-1 flex flex-col gap-2"></div>
+            </div>
+            
+            <!-- TAB: MANUAL -->
+            <div id="viewManual" class="flex-grow overflow-y-auto pr-1 hidden">
+                <form id="spellForm" onsubmit="addManualSpell(event)">
+                    <div class="form-group"><label>Nombre</label><input type="text" id="s_nombre" required></div>
+                    <div class="form-group"><label>Inglés</label><input type="text" id="s_nombre_en"></div>
+                    <div class="flex gap-2"><div class="form-group w-1/3"><label>Nivel</label><input type="text" id="s_nivel" required></div><div class="form-group w-2/3"><label>Escuela</label><input type="text" id="s_escuela" required></div></div>
+                    <div class="flex gap-2"><div class="form-group w-1/2"><label>Tiempo</label><input type="text" id="s_tiempo_lanzamiento"></div><div class="form-group w-1/2"><label>Alcance</label><input type="text" id="s_alcance"></div></div>
+                    <div class="flex gap-2"><div class="form-group w-1/2"><label>Comp.</label><input type="text" id="s_componentes"></div><div class="form-group w-1/2"><label>Duración</label><input type="text" id="s_duracion"></div></div>
+                    
+                    <div class="flex gap-2 mb-3 p-2 bg-gray-800 rounded border border-gray-600 flex-wrap">
+                        <label class="flex items-center gap-1 text-xs font-bold cursor-pointer w-[45%]"><input type="checkbox" id="s_concentracion" class="w-3 h-3"> Conc.</label>
+                        <label class="flex items-center gap-1 text-xs font-bold cursor-pointer w-[45%]"><input type="checkbox" id="s_ritual" class="w-3 h-3"> Ritual</label>
+                        <!-- NUEVO CHECKBOX PARA FORZAR CARTA DOBLE MANUALMENTE -->
+                        <label class="flex items-center gap-1 text-xs font-bold cursor-pointer text-yellow-400 w-full mt-1"><input type="checkbox" id="s_carta_doble" class="w-3 h-3"> Forzar Carta Doble (Larga)</label>
+                    </div>
+
+                    <div class="form-group"><label>Clases</label><input type="text" id="s_clases"></div>
+                    <div class="form-group"><label>Fuente</label><input type="text" id="s_fuente"></div>
+                    <div class="form-group"><label>Descripción</label><textarea id="s_descripcion"></textarea></div>
+                    <div class="form-group"><label>Niveles Superiores</label><textarea id="s_niveles_superiores" style="height:40px;"></textarea></div>
+                    <button type="submit" class="btn mt-2">✚ Agregar</button>
+                </form>
+            </div>
+
+            <!-- CONTADOR -->
+            <div class="mt-4 border-t border-gray-600 pt-4 text-center shrink-0">
+                <span class="text-xs text-gray-400 block mb-2">Cartas en la hoja: <span id="spellCount" class="font-bold text-white">0</span></span>
+                <button onclick="clearAll()" class="text-xs text-red-400 hover:text-red-300 underline font-bold cursor-pointer">Borrar todas las cartas</button>
+            </div>
+        </div>
+
+        <!-- ZONA DE IMPRESIÓN -->
+        <div class="preview-section flex-grow">
+            <div class="text-center text-gray-500 mt-20 opacity-50 no-print" id="emptyState">
+                <p class="text-4xl mb-2">🎴</p><p class="font-bold">No hay cartas.</p><p class="text-sm">Agrega hechizos desde la izquierda.</p>
+            </div>
+            <div id="printZone" class="w-full flex flex-col items-center"></div>
+        </div>
+    </div>
+
+    <!-- MODAL VISTA PREVIA -->
+    <div id="previewModal" class="fixed inset-0 bg-black/80 z-[10000] hidden items-center justify-center no-print backdrop-blur-sm overflow-y-auto py-10">
+        <div class="p-2 relative flex flex-col items-center my-auto">
+            <button onclick="togglePreview()" class="absolute -top-4 -right-4 bg-red-500 hover:bg-red-600 text-white rounded-full w-8 h-8 font-bold border-2 border-[#222] z-50 transition-transform hover:scale-110 shadow-lg">✕</button>
+            <div id="previewCard" class="shadow-2xl rounded-md" style="width: 99mm; background: white;"></div>
+        </div>
+    </div>
+
+    <script>
+        let spells = [], dbSpells = [], filteredDb = [];
+
+        document.addEventListener('DOMContentLoaded', () => { fetchDatabase(); render(); });
+
+        const updateVar = (name, val) => document.documentElement.style.setProperty(name, val);
+        const changeTheme = (t) => { document.body.className = t === 'classic' ? 'theme-classic' : `theme-${t}`; };
+
+        // Mostrar/Ocultar paneles garantizando que solo uno se vea a la vez
+        function togglePanel(id) {
+            ['patternControls', 'cpatControls'].forEach(pid => {
+                if (pid !== id) {
+                    document.getElementById(pid).classList.add('hidden');
+                    document.getElementById(pid).style.display = 'none';
+                }
+            });
+            const el = document.getElementById(id);
+            el.classList.toggle('hidden');
+            el.style.display = el.classList.contains('hidden') ? 'none' : 'block';
+        }
+
+        function togglePreview() {
+            const el = document.getElementById('previewModal');
+            el.classList.toggle('hidden');
+            el.style.display = el.classList.contains('hidden') ? 'none' : 'flex';
+        }
+
+        function switchTab(tab) {
+            document.getElementById('tabBtnDB').className = tab === 'db' ? 'tab-btn active' : 'tab-btn inactive';
+            document.getElementById('tabBtnManual').className = tab === 'manual' ? 'tab-btn active' : 'tab-btn inactive';
+            document.getElementById('viewDB').style.display = tab === 'db' ? 'flex' : 'none';
+            document.getElementById('viewManual').style.display = tab === 'manual' ? 'block' : 'none';
+        }
+
+        async function fetchDatabase() {
+            const statusEl = document.getElementById('dbStatus');
+            statusEl.innerHTML = 'Conectando con GitHub...';
+            try {
+                const nocache = '?t=' + new Date().getTime();
+                let urlMain = 'https://raw.githubusercontent.com/PoisonedIsa/Generador-de-cartas-de-hechizo/main/base%20de%20datos.json' + nocache;
+                let urlMaster = 'https://raw.githubusercontent.com/PoisonedIsa/Generador-de-cartas-de-hechizo/master/base%20de%20datos.json' + nocache;
+                
+                let res = await fetch(urlMain, { cache: 'no-store' });
+                if (!res.ok) res = await fetch(urlMaster, { cache: 'no-store' });
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                
+                const textData = await res.text();
+                try {
+                    dbSpells = JSON.parse(textData);
+                    dbSpells.sort((a, b) => (a.nombre || '').localeCompare(b.nombre || '', 'es', { sensitivity: 'base' }));
+                } catch (e) {
+                    throw new Error('JSON inválido');
+                }
+                
+                statusEl.innerHTML = `<span class="text-green-400">${dbSpells.length} cargados.</span>`;
+            } catch (e) {
+                statusEl.innerHTML = `<span class="text-red-400" title="${e.message}">⚠️ Error: ${e.message}</span>`;
+                dbSpells = [{ "nombre": "Esperando conexión...", "nivel": "0", "escuela": "Sistema", "tiempo_lanzamiento": "-", "alcance": "-", "duracion": "-", "componentes": "-", "clases": "Mago", "fuente": "Error", "descripcion": "No se pudo leer GitHub. Intenta recargar en unos segundos."}];
+            }
+            populateFilters(); filterDB();
+        }
+
+        function populateFilters() {
+            const levels = new Set(), classes = new Set(), sources = new Set();
+            dbSpells.forEach(s => {
+                if (s.nivel !== undefined) levels.add(parseInt(s.nivel));
+                if (s.fuente) sources.add(s.fuente);
+                if (s.clases) s.clases.split(',').forEach(c => classes.add(c.trim()));
+            });
+
+            const fill = (id, arr, defaultTxt, isLvl) => {
+                const el = document.getElementById(id); el.innerHTML = `<option value="">${defaultTxt}</option>`;
+                arr.forEach(i => el.innerHTML += `<option value="${i}">${isLvl ? (i===0?'Truco':`Nivel ${i}`) : i}</option>`);
+            };
+
+            fill('filterLvlMin', [...levels].sort((a,b)=>a-b), 'Mín', true);
+            fill('filterLvlMax', [...levels].sort((a,b)=>a-b), 'Máx', true);
+            fill('filterClass', [...classes].sort(), 'Todas las Clases', false);
+            fill('filterSource', [...sources].sort(), 'Todas las Fuentes', false);
+        }
+
+        function filterDB() {
+            const qN = document.getElementById('filterName').value.toLowerCase(), qMin = document.getElementById('filterLvlMin').value, qMax = document.getElementById('filterLvlMax').value, qC = document.getElementById('filterClass').value, qS = document.getElementById('filterSource').value;
+            
+            filteredDb = dbSpells.filter(s => {
+                const lvl = parseInt(s.nivel);
+                return (s.nombre.toLowerCase().includes(qN) || (s.nombre_en||'').toLowerCase().includes(qN)) &&
+                       (qMin === "" || (!isNaN(lvl) && lvl >= parseInt(qMin))) &&
+                       (qMax === "" || (!isNaN(lvl) && lvl <= parseInt(qMax))) &&
+                       (qS === "" || s.fuente === qS) && (qC === "" || (s.clases && s.clases.includes(qC)));
+            });
+            document.getElementById('dbStatus').innerText = `${filteredDb.length} encontrados.`;
+            
+            const countMatch = (s, skC, skS) => {
+                const lvl = parseInt(s.nivel);
+                if (!((s.nombre.toLowerCase().includes(qN) || (s.nombre_en||'').toLowerCase().includes(qN)))) return false;
+                if (qMin !== "" && (isNaN(lvl) || lvl < parseInt(qMin))) return false;
+                if (qMax !== "" && (isNaN(lvl) || lvl > parseInt(qMax))) return false;
+                if (!skC && qC !== "" && (!s.clases || !s.clases.includes(qC))) return false;
+                if (!skS && qS !== "" && s.fuente !== qS) return false;
+                return true;
+            };
+            
+            Array.from(document.getElementById('filterClass').options).forEach(o => { if(o.value) o.text = `${o.value} (${dbSpells.filter(s => countMatch(s, true, false) && s.clases && s.clases.includes(o.value)).length})`});
+            Array.from(document.getElementById('filterSource').options).forEach(o => { if(o.value) o.text = `${(o.value.length>22?o.value.substring(0,20)+'...':o.value)} (${dbSpells.filter(s => countMatch(s, false, true) && s.fuente === o.value).length})`});
+            
+            renderDB();
+        }
+
+        function renderDB() {
+            const list = document.getElementById('dbResultsList'); list.innerHTML = '';
+            if (!filteredDb.length) return list.innerHTML = '<div class="text-center text-gray-500 text-xs mt-4">No hay resultados.</div>';
+
+            filteredDb.forEach((s, i) => {
+                let warn = ['nombre','nivel','escuela','tiempo_lanzamiento','alcance','componentes','duracion','clases','fuente','descripcion'].some(r => !s[r] || !String(s[r]).trim()) ? '⚠️' : '';
+                list.innerHTML += `
+                    <div class="db-result-item">
+                        <div class="db-result-info">
+                            <h4>${s.nombre} <span class="text-yellow-400 text-[10px]" title="Falta información">${warn}</span></h4>
+                            <p>${s.nivel == 0 ? 'Truco' : 'Nivel '+s.nivel} · ${s.escuela || '-'}</p>
+                        </div>
+                        <div class="flex gap-1">
+                            <button class="action-btn btn-view" onclick="previewSpell(${i})" title="Vista Previa">👁️</button>
+                            <button class="action-btn btn-add" onclick="addSpell(${i}, true)" title="Añadir">✚</button>
+                        </div>
+                    </div>`;
+            });
+        }
+
+        function processSpellText(spell) {
+            const s = { ...spell };
+            if (s.descripcion) {
+                s.descripcion = s.descripcion.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<em>$1</em>');
+            }
+            if (s.niveles_superiores) {
+                s.niveles_superiores = s.niveles_superiores.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<em>$1</em>');
+            }
+            return s;
+        }
+
+        function addSpell(data, isDB = false) {
+            let s = isDB ? processSpellText(filteredDb[data]) : processSpellText(data);
+            spells.push(s);
+            render();
+        }
+
+        function addManualSpell(e) {
+            e.preventDefault();
+            const ids = ['s_nombre','s_nombre_en','s_nivel','s_escuela','s_tiempo_lanzamiento','s_alcance','s_componentes','s_duracion','s_clases','s_fuente','s_descripcion','s_niveles_superiores'];
+            let s = {}; ids.forEach(id => s[id.replace('s_','')] = document.getElementById(id).value);
+            s.concentracion = document.getElementById('s_concentracion').checked;
+            s.ritual = document.getElementById('s_ritual').checked;
+            s.carta_doble = document.getElementById('s_carta_doble').checked;
+            addSpell(s);
+            ['s_nombre','s_nombre_en','s_descripcion','s_niveles_superiores'].forEach(id => document.getElementById(id).value = '');
+            document.getElementById('s_carta_doble').checked = false;
+            document.getElementById('s_nombre').focus();
+        }
+
+        const clearAll = () => { if(confirm('¿Borrar todas las cartas?')) { spells = []; render(); } };
+        const removeSpell = (i) => { spells.splice(i, 1); render(); };
+
+        function previewSpell(i) {
+            const s = processSpellText(filteredDb[i]);
+            let totalLen = (s.descripcion || '').length + (s.niveles_superiores || '').length;
+            let isDouble = s.carta_doble || totalLen > 850;
+            
+            const pCard = document.getElementById('previewCard');
+            // Ajustamos la altura de la vista previa dependiendo si es normal o doble
+            pCard.style.height = isDouble ? '210mm' : '105mm'; 
+            pCard.innerHTML = genCardHTML(s, null, isDouble);
+            togglePreview();
+        }
+
+        function genCardHTML(s, idx, isDouble) {
+            let sub = `${s.nivel == 0 ? 'Truco' : `Nivel ${s.nivel}`} de ${s.escuela}`; if (s.ritual) sub += " (Ritual)";
+            let navSup = s.niveles_superiores; let showNavSup = navSup && navSup.toLowerCase().trim() !== "no" && navSup.trim() !== "";
+            let doubleClass = isDouble ? 'double-card' : '';
+            
+            return `
+            <div class="spell-card group ${doubleClass}">
+                ${idx !== null ? `<button class="delete-card-btn" onclick="removeSpell(${idx})">✕</button>` : ''}
+                ${isDouble ? `<div class="fold-indicator no-print">DOBLEZ</div>` : ''}
+                
+                <!-- TRAMA DEL FONDO DE LA CARTA -->
+                <div class="card-pattern-layer"><div class="cpat-split cpat-odd"></div><div class="cpat-split cpat-even"></div></div>
+                
+                <div class="card-header font-title"><div class="card-title">${s.nombre || '-'}</div>${s.nombre_en ? `<div class="card-subtitle font-body text-[7px] text-gray-500">${s.nombre_en}</div>` : ''}<div class="card-subtitle font-body mt-0.5">${sub}</div></div>
+                <div class="card-flavor-bar"><div class="pattern-layer"><div class="pat-split pat-odd"></div><div class="pat-split pat-even"></div></div></div>
+                
+                <div class="card-meta font-body"><div><strong>Tiempo</strong>${s.tiempo_lanzamiento || '-'}</div><div><strong>Alcance</strong>${s.alcance || '-'}</div><div><strong>Componentes</strong>${s.componentes || '-'}</div><div><strong>Duración</strong>${s.concentracion ? '<span style="background:black;color:white;border-radius:50%;width:10px;height:10px;display:inline-block;text-align:center;font-size:8px;line-height:10px;margin-right:3px;">C</span>' : ''}${s.duracion || '-'}</div></div>
+                
+                <div class="card-desc font-body">${s.descripcion || '<span class="text-gray-400 italic">Sin descripción...</span>'}${showNavSup ? `<div class="mt-2 pt-1 border-t border-dotted border-gray-400"><strong>Superiores:</strong> ${navSup}</div>` : ''}</div>
+                
+                <div class="card-footer font-body"><div class="footer-classes">${s.clases || '-'}</div><div class="footer-source">${s.fuente || '-'}</div></div>
+            </div>`;
+        }
+
+        function render() {
+            document.getElementById('spellCount').innerText = spells.length;
+            const pZone = document.getElementById('printZone'); pZone.innerHTML = '';
+            document.getElementById('emptyState').style.display = spells.length ? 'none' : 'block';
+            if (!spells.length) return;
+
+            let pages = [];
+            let currentChunk = [];
+            let c1 = 0, c2 = 0, c3 = 0; // Contadores de capacidad por columna (Máx 2 por columna)
+
+            const pushPage = () => {
+                if(currentChunk.length > 0) pages.push(currentChunk);
+                currentChunk = [];
+                c1 = 0; c2 = 0; c3 = 0;
+            };
+
+            // Lógica de empaquetado denso para cuadrícula
+            spells.forEach((s, idx) => {
+                let totalLen = (s.descripcion || '').length + (s.niveles_superiores || '').length;
+                let isDouble = s.carta_doble || totalLen > 850;
+                
+                // Guardamos sus datos para el renderizado
+                let cardData = { spell: s, index: idx, double: isDouble };
+
+                if (isDouble) {
+                    if (c1 === 0) { c1 = 2; currentChunk.push(cardData); }
+                    else if (c2 === 0) { c2 = 2; currentChunk.push(cardData); }
+                    else if (c3 === 0) { c3 = 2; currentChunk.push(cardData); }
+                    else {
+                        pushPage();
+                        c1 = 2; currentChunk.push(cardData);
+                    }
+                } else {
+                    if (c1 < 2) { c1++; currentChunk.push(cardData); }
+                    else if (c2 < 2) { c2++; currentChunk.push(cardData); }
+                    else if (c3 < 2) { c3++; currentChunk.push(cardData); }
+                    else {
+                        pushPage();
+                        c1 = 1; currentChunk.push(cardData);
+                    }
+                }
+            });
+            pushPage();
+
+            // Dibujar las páginas calculadas
+            pages.forEach((chunk, pageIndex) => {
+                let pageDiv = document.createElement('div'); 
+                pageDiv.className = 'a4-page';
+                
+                chunk.forEach(item => {
+                    pageDiv.innerHTML += genCardHTML(item.spell, item.index, item.double);
+                });
+                
+                pZone.appendChild(pageDiv);
+                pZone.innerHTML += `<div class="no-print text-center text-white text-xs font-bold -mt-4 mb-8 border-b border-gray-600 pb-2">↑ HOJA ${pageIndex + 1} (FRENTE) ↑</div>`;
+            });
+
+            pZone.innerHTML += `<div class="no-print text-center text-purple-400 text-xs font-bold mt-4 mb-4">↓ HOJA DE REVERSO UNIVERSAL ↓</div>
+            <div class="a4-page universal-back"><div class="pattern-layer"><div class="pat-split pat-odd"></div><div class="pat-split pat-even"></div></div></div>`;
+        }
+
+        function applyPattern(inp) {
+            if (inp.files && inp.files[0]) {
+                const r = new FileReader(); r.onload = e => updateVar('--pat-image', `url('${e.target.result}')`); r.readAsDataURL(inp.files[0]);
+            }
+        }
+        
+        function applyCardPattern(inp) {
+            if (inp.files && inp.files[0]) {
+                const r = new FileReader(); r.onload = e => updateVar('--cpat-image', `url('${e.target.result}')`); r.readAsDataURL(inp.files[0]);
+            }
+        }
+    </script>
+</body>
+</html>
