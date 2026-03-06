@@ -44,10 +44,11 @@
         
         .spell-card { 
             width: 100%; height: 100%; 
-            background-color: var(--bg-paper); border: var(--border-outer); 
+            background-color: var(--bg-back); /* MODIFICADO: Ahora el fondo exterior usa el color del reverso */
+            border: var(--border-outer); 
             position: relative; overflow: hidden; display: flex; flex-direction: column; 
             box-sizing: border-box; 
-            padding: 5.5mm 6.5mm; 
+            padding: 3.5mm; /* GROSOR DEL MARCO COLOREADO EXTERIOR */
             transition: background-color 0.3s; 
         }
         
@@ -61,43 +62,48 @@
             content: '';
             position: absolute;
             top: 50%; left: 0; right: 0;
-            border-top: 1.5px dashed rgba(0,0,0,0.4);
-            z-index: 20;
+            border-top: 1.5px dashed rgba(0,0,0,0.6);
+            z-index: 30;
             pointer-events: none;
         }
 
-        /* MARCO INTERIOR SÓLIDO */
-        .spell-card::after {
-            content: '';
-            position: absolute;
-            top: 2.5mm; left: 2.5mm; right: 2.5mm; bottom: 2.5mm;
+        /* NUEVO CONTENEDOR INTERNO DE LA CARTA (EL "PAPIRO") */
+        .card-content {
+            background-color: var(--bg-paper);
             border: var(--border-inner);
-            pointer-events: none;
-            z-index: 5;
+            border-radius: 2px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            z-index: 10;
+            padding: 3mm 4mm;
+            overflow: hidden;
+            transition: background-color 0.3s;
         }
         
-        /* Ignorar el fondo y botones en el apilamiento */
-        .spell-card > *:not(.card-pattern-layer):not(.delete-card-btn):not(.fold-indicator) { position: relative; z-index: 10; }
+        /* Ignorar el fondo y botones en el apilamiento principal */
+        .spell-card > *:not(.card-content):not(.pattern-layer):not(.delete-card-btn):not(.fold-indicator) { position: relative; z-index: 10; }
         
         /* INDICADOR VISUAL DE DOBLEZ (SOLO PANTALLA) */
-        .fold-indicator { position: absolute; top: 50%; left: -2px; transform: translateY(-50%); font-size: 8px; color: #888; z-index: 25; pointer-events: none; font-weight: bold; background: var(--bg-paper); padding: 2px; }
+        .fold-indicator { position: absolute; top: 50%; left: -2px; transform: translateY(-50%); font-size: 8px; color: #fff; z-index: 35; pointer-events: none; font-weight: bold; background: #000; padding: 2px; border-radius: 2px; }
 
         /* INTERIOR DE LA CARTA */
-        .card-header { padding-bottom: 1mm; margin-bottom: 1.5mm; text-align: center; } 
-        .card-title { font-size: 16px; font-weight: 900; text-transform: uppercase; line-height: 1.1; }
-        .card-subtitle { font-size: 9px; font-weight: bold; color: #444; text-transform: uppercase; }
+        .card-header { padding-bottom: 1mm; margin-bottom: 1.5mm; text-align: center; position: relative; z-index: 10;} 
+        .card-title { font-size: 18px; font-weight: 900; text-transform: uppercase; line-height: 1.1; }
+        .card-subtitle { font-size: 10px; font-weight: bold; color: #444; text-transform: uppercase; }
         
-        /* FRANJA DE PERSONALIDAD */
-        .card-flavor-bar { width: 100%; height: 6mm; background-color: var(--bg-back); position: relative; overflow: hidden; border: 1px solid #1a1a1a; border-radius: 2px; margin-bottom: 2mm; box-shadow: inset 0 1px 2px rgba(0,0,0,0.3); flex-shrink: 0; }
+        /* FRANJA DE PERSONALIDAD (MÁS DELGADA Y SUTIL) */
+        .card-flavor-bar { width: 100%; height: 2.5mm; background-color: var(--bg-back); position: relative; overflow: hidden; border: 1px solid #1a1a1a; border-radius: 2px; margin-bottom: 2mm; box-shadow: inset 0 1px 2px rgba(0,0,0,0.3); flex-shrink: 0; z-index: 10;}
         
         /* METADATOS (Tiempo, alcance, etc) */
-        .card-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5mm; font-size: 10.5px; margin-bottom: 2mm; line-height: 1.2; flex-shrink: 0; }
-        .card-meta strong { color: #000; display: block; font-size: 8.5px; text-transform: uppercase; border-bottom: 0.5px dotted #666; margin-bottom: 0.5px; }
+        .card-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5mm; font-size: 12px; margin-bottom: 2mm; line-height: 1.2; flex-shrink: 0; }
+        .card-meta strong { color: #000; display: block; font-size: 9.5px; text-transform: uppercase; border-bottom: 0.5px dotted #666; margin-bottom: 0.5px; }
         
-        .card-desc { font-size: 10.5px; text-align: justify; line-height: 1.35; overflow: hidden; flex-grow: 1; margin-bottom: 1mm; }
+        .card-desc { font-size: 12px; text-align: justify; line-height: 1.35; overflow: hidden; flex-grow: 1; margin-bottom: 1mm; }
         
         /* FOOTER ANCLADO AL FONDO */
-        .card-footer { display: flex; justify-content: space-between; font-size: 7px; color: #666; border-top: 1px solid #ccc; padding-top: 1mm; margin-top: auto; font-weight: bold; text-transform: uppercase; flex-shrink: 0; }
+        .card-footer { display: flex; justify-content: space-between; font-size: 8.5px; color: #666; border-top: 1px solid #ccc; padding-top: 1mm; margin-top: auto; font-weight: bold; text-transform: uppercase; flex-shrink: 0; }
         .footer-classes { width: 70%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .footer-source { width: 30%; text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         
@@ -396,14 +402,31 @@
             if (!filteredDb.length) return list.innerHTML = '<div class="text-center text-gray-500 text-xs mt-4">No hay resultados.</div>';
 
             filteredDb.forEach((s, i) => {
-                let warn = ['nombre','nivel','escuela','tiempo_lanzamiento','alcance','componentes','duracion','clases','fuente','descripcion'].some(r => !s[r] || !String(s[r]).trim()) ? '⚠️' : '';
+                // 1. REVISAR CAMPOS FALTANTES (Advertencia Amarilla)
+                let missing = [];
+                ['nombre','nivel','escuela','tiempo_lanzamiento','alcance','componentes','duracion','clases','fuente','descripcion'].forEach(r => {
+                    if (!s[r] || !String(s[r]).trim()) missing.push(r);
+                });
+                let warnYellow = missing.length > 0 ? `<span class="text-yellow-400 text-[10px] ml-1 cursor-help" title="Falta información: ${missing.join(', ')}">⚠️</span>` : '';
+
+                // 2. REVISAR PROBLEMAS DE FORMATO/LONGITUD (Alarma Roja)
+                let lengthIssues = [];
+                if (s.nombre && s.nombre.length > 35) lengthIssues.push('Título');
+                if (s.tiempo_lanzamiento && s.tiempo_lanzamiento.length > 45) lengthIssues.push('Tiempo');
+                if (s.alcance && s.alcance.length > 45) lengthIssues.push('Alcance');
+                if (s.componentes && s.componentes.length > 45) lengthIssues.push('Componentes');
+                if (s.duracion && s.duracion.length > 45) lengthIssues.push('Duración');
+                if (s.clases && s.clases.length > 60) lengthIssues.push('Clases');
+                
+                let warnRed = lengthIssues.length > 0 ? `<span class="text-red-500 text-[10px] ml-1 cursor-help" title="Texto muy largo (Podría sobreponerse o verse mal): ${lengthIssues.join(', ')}">🚨</span>` : '';
+
                 list.innerHTML += `
                     <div class="db-result-item">
                         <div class="db-result-info">
-                            <h4>${s.nombre} <span class="text-yellow-400 text-[10px]" title="Falta información">${warn}</span></h4>
+                            <h4 class="flex items-center flex-wrap">${s.nombre} ${warnYellow}${warnRed}</h4>
                             <p>${s.nivel == 0 ? 'Truco' : 'Nivel '+s.nivel} · ${s.escuela || '-'}</p>
                         </div>
-                        <div class="flex gap-1">
+                        <div class="flex gap-1 shrink-0">
                             <button class="action-btn btn-view" onclick="previewSpell(${i})" title="Vista Previa">👁️</button>
                             <button class="action-btn btn-add" onclick="addSpell(${i}, true)" title="Añadir">✚</button>
                         </div>
@@ -447,7 +470,7 @@
         function previewSpell(i) {
             const s = processSpellText(filteredDb[i]);
             let totalLen = (s.descripcion || '').length + (s.niveles_superiores || '').length;
-            let isDouble = s.carta_doble || totalLen > 850;
+            let isDouble = s.carta_doble || totalLen > 700;
             
             const pCard = document.getElementById('previewCard');
             // Ajustamos la altura de la vista previa dependiendo si es normal o doble
@@ -466,17 +489,24 @@
                 ${idx !== null ? `<button class="delete-card-btn" onclick="removeSpell(${idx})">✕</button>` : ''}
                 ${isDouble ? `<div class="fold-indicator no-print">DOBLEZ</div>` : ''}
                 
-                <!-- TRAMA DEL FONDO DE LA CARTA -->
-                <div class="card-pattern-layer"><div class="cpat-split cpat-odd"></div><div class="cpat-split cpat-even"></div></div>
+                <!-- TRAMA DEL REVERSO (PARA EL MARCO EXTERIOR) -->
+                <div class="pattern-layer"><div class="pat-split pat-odd"></div><div class="pat-split pat-even"></div></div>
                 
-                <div class="card-header font-title"><div class="card-title">${s.nombre || '-'}</div>${s.nombre_en ? `<div class="card-subtitle font-body text-[7px] text-gray-500">${s.nombre_en}</div>` : ''}<div class="card-subtitle font-body mt-0.5">${sub}</div></div>
-                <div class="card-flavor-bar"><div class="pattern-layer"><div class="pat-split pat-odd"></div><div class="pat-split pat-even"></div></div></div>
-                
-                <div class="card-meta font-body"><div><strong>Tiempo</strong>${s.tiempo_lanzamiento || '-'}</div><div><strong>Alcance</strong>${s.alcance || '-'}</div><div><strong>Componentes</strong>${s.componentes || '-'}</div><div><strong>Duración</strong>${s.concentracion ? '<span style="background:black;color:white;border-radius:50%;width:10px;height:10px;display:inline-block;text-align:center;font-size:8px;line-height:10px;margin-right:3px;">C</span>' : ''}${s.duracion || '-'}</div></div>
-                
-                <div class="card-desc font-body">${s.descripcion || '<span class="text-gray-400 italic">Sin descripción...</span>'}${showNavSup ? `<div class="mt-2 pt-1 border-t border-dotted border-gray-400"><strong>Superiores:</strong> ${navSup}</div>` : ''}</div>
-                
-                <div class="card-footer font-body"><div class="footer-classes">${s.clases || '-'}</div><div class="footer-source">${s.fuente || '-'}</div></div>
+                <!-- CONTENIDO INTERNO DE LA CARTA ("EL PAPIRO") -->
+                <div class="card-content">
+                    <!-- TRAMA DEL FONDO DE LA CARTA -->
+                    <div class="card-pattern-layer"><div class="cpat-split cpat-odd"></div><div class="cpat-split cpat-even"></div></div>
+                    
+                    <div class="card-header font-title"><div class="card-title">${s.nombre || '-'}</div>${s.nombre_en ? `<div class="card-subtitle font-body text-[8.5px] text-gray-500">${s.nombre_en}</div>` : ''}<div class="card-subtitle font-body mt-0.5">${sub}</div></div>
+                    
+                    <div class="card-flavor-bar"><div class="pattern-layer"><div class="pat-split pat-odd"></div><div class="pat-split pat-even"></div></div></div>
+                    
+                    <div class="card-meta font-body"><div><strong>Tiempo</strong>${s.tiempo_lanzamiento || '-'}</div><div><strong>Alcance</strong>${s.alcance || '-'}</div><div><strong>Componentes</strong>${s.componentes || '-'}</div><div><strong>Duración</strong>${s.concentracion ? '<span style="background:black;color:white;border-radius:50%;width:12px;height:12px;display:inline-block;text-align:center;font-size:9px;line-height:12px;margin-right:3px;">C</span>' : ''}${s.duracion || '-'}</div></div>
+                    
+                    <div class="card-desc font-body">${s.descripcion || '<span class="text-gray-400 italic">Sin descripción...</span>'}${showNavSup ? `<div class="mt-2 pt-1 border-t border-dotted border-gray-400"><strong>Superiores:</strong> ${navSup}</div>` : ''}</div>
+                    
+                    <div class="card-footer font-body"><div class="footer-classes">${s.clases || '-'}</div><div class="footer-source">${s.fuente || '-'}</div></div>
+                </div>
             </div>`;
         }
 
@@ -499,7 +529,7 @@
             // Lógica de empaquetado denso para cuadrícula
             spells.forEach((s, idx) => {
                 let totalLen = (s.descripcion || '').length + (s.niveles_superiores || '').length;
-                let isDouble = s.carta_doble || totalLen > 850;
+                let isDouble = s.carta_doble || totalLen > 700;
                 
                 // Guardamos sus datos para el renderizado
                 let cardData = { spell: s, index: idx, double: isDouble };
