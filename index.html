@@ -40,7 +40,7 @@
         .cpat-even { -webkit-mask-image: repeating-linear-gradient(to bottom, transparent 0, transparent var(--cpat-size), black var(--cpat-size), black calc(var(--cpat-size) * 2)); mask-image: repeating-linear-gradient(to bottom, transparent 0, transparent var(--cpat-size), black var(--cpat-size), black calc(var(--cpat-size) * 2)); transform: translateX(var(--cpat-offset-b)); }
 
         /* HOJAS Y CARTAS */
-        .a4-page { width: 297mm; height: 210mm; background: white; margin: 0 auto 20px auto; box-shadow: 0 4px 15px rgba(0,0,0,0.5); display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 1fr); grid-auto-flow: column dense; gap: 0; page-break-after: always; box-sizing: border-box; position: relative; overflow: hidden; }
+        .a4-page { width: 210mm; height: 297mm; background: white; margin: 0 auto 20px auto; box-shadow: 0 4px 15px rgba(0,0,0,0.5); display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); grid-auto-flow: column dense; gap: 0; page-break-after: always; box-sizing: border-box; position: relative; overflow: hidden; }
         
         .spell-card { 
             width: 100%; height: 100%; 
@@ -48,7 +48,7 @@
             border: var(--border-outer); 
             position: relative; overflow: hidden; display: flex; flex-direction: column; 
             box-sizing: border-box; 
-            padding: 3.5mm; 
+            padding: 2.5mm; 
             transition: background-color 0.3s; 
         }
         
@@ -77,7 +77,7 @@
             flex-direction: column;
             position: relative;
             z-index: 10;
-            padding: 3mm 4mm;
+            padding: 2mm 3mm;
             overflow: hidden;
             transition: background-color 0.3s;
         }
@@ -87,36 +87,37 @@
         .fold-indicator { position: absolute; top: 50%; left: -2px; transform: translateY(-50%); font-size: 8px; color: #fff; z-index: 35; pointer-events: none; font-weight: bold; background: #000; padding: 2px; border-radius: 2px; }
 
         /* INTERIOR DE LA CARTA */
-        .card-header { padding-bottom: 1mm; margin-bottom: 1.5mm; text-align: center; position: relative; z-index: 10;} 
-        .card-title { font-size: 18px; font-weight: 900; text-transform: uppercase; line-height: 1.1; transition: font-size 0.2s;}
-        .card-subtitle { font-size: 10px; font-weight: bold; color: #444; text-transform: uppercase; transition: font-size 0.2s; }
+        /* Titulo y Subtitulo FIJOS */
+        .card-header { padding-bottom: 0.5mm; margin-bottom: 1mm; text-align: center; position: relative; z-index: 10;} 
+        .card-title { font-size: 16.5px; font-weight: 900; text-transform: uppercase; line-height: 1.1; }
+        .card-subtitle { font-size: 9px; font-weight: bold; color: #444; text-transform: uppercase; }
         
-        .card-flavor-bar { width: 100%; height: 2.5mm; background-color: var(--bg-back); position: relative; overflow: hidden; border: 1px solid #1a1a1a; border-radius: 2px; margin-bottom: 2mm; box-shadow: inset 0 1px 2px rgba(0,0,0,0.3); flex-shrink: 0; z-index: 10;}
+        .card-flavor-bar { width: 100%; height: 2mm; background-color: var(--bg-back); position: relative; overflow: hidden; border: 1px solid #1a1a1a; border-radius: 2px; margin-bottom: 1.5mm; box-shadow: inset 0 1px 2px rgba(0,0,0,0.3); flex-shrink: 0; z-index: 10;}
         
-        .card-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5mm; font-size: 12px; margin-bottom: 2mm; line-height: 1.2; flex-shrink: 0; transition: all 0.2s;}
-        .card-meta strong { color: #000; display: block; font-size: 9.5px; text-transform: uppercase; border-bottom: 0.5px dotted #666; margin-bottom: 0.5px; transition: font-size 0.2s;}
+        /* Metadatos FIJOS en tamaño para todas las cartas simples */
+        .card-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 1mm; margin-bottom: 1.5mm; flex-shrink: 0; font-size: 10.5px; line-height: 1.15; }
+        .card-meta strong { color: #000; display: block; font-size: 8px; text-transform: uppercase; border-bottom: 0.5px dotted #666; margin-bottom: 0.5px; }
         
-        .card-desc { font-size: 12px; text-align: justify; line-height: 1.35; overflow: hidden; flex-grow: 1; flex-shrink: 1; min-height: 0; margin-bottom: 1mm; transition: all 0.2s; position: relative; }
+        /* La descripción y nav sí escalarán dinámicamente con JS */
+        .card-desc { text-align: justify; overflow: hidden; flex-grow: 1; flex-shrink: 1; min-height: 0; margin-bottom: 0.5mm; transition: all 0.2s; position: relative; }
         /* Efecto de difuminado (fade) al final del texto para que no se vea cortado bruscamente */
-        .card-desc::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 4mm; background: linear-gradient(to bottom, transparent, var(--bg-paper)); pointer-events: none; }
-        .card-desc p { margin: 0 0 1.5mm 0; }
+        .card-desc::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3.5mm; background: linear-gradient(to bottom, transparent, var(--bg-paper)); pointer-events: none; }
+        .card-desc p { margin: 0 0 1mm 0; }
         .card-desc p:last-child { margin-bottom: 0; }
 
         /* NIVELES SUPERIORES (CONTENEDOR INDEPENDIENTE Y PROTEGIDO) */
-        .card-nav-sup { font-size: 11.5px; line-height: 1.25; overflow: hidden; flex-shrink: 0; text-align: justify; margin-bottom: 1.5mm; padding-top: 1mm; border-top: 1px dotted #888; background-color: var(--bg-paper); position: relative; z-index: 5; }
-        .card-nav-sup strong { color: #000; font-size: 10px; text-transform: uppercase; margin-right: 2px;}
+        .card-nav-sup { overflow: hidden; flex-shrink: 0; text-align: justify; margin-bottom: 1mm; padding-top: 1mm; border-top: 1px dotted #888; background-color: var(--bg-paper); position: relative; z-index: 5; }
+        .card-nav-sup strong { color: #000; font-size: 0.85em; text-transform: uppercase; margin-right: 2px;}
         /* El display inline evita saltos de línea molestos y ahorra espacio */
         .card-nav-sup p { display: inline; margin: 0; }
         
-        /* MEJORAS VISUALES ESPECÍFICAS PARA CARTAS DOBLES */
-        .spell-card.double-card .card-title { font-size: 21px; }
-        .spell-card.double-card .card-subtitle { font-size: 11px; margin-bottom: 2.5mm;}
-        .spell-card.double-card .card-meta { font-size: 13.5px; margin-bottom: 4mm; gap: 3mm; }
-        .spell-card.double-card .card-meta strong { font-size: 10.5px; }
-        .spell-card.double-card .card-desc { font-size: 13.5px; line-height: 1.45; }
+        /* MEJORAS VISUALES ESPECÍFICAS PARA CARTAS DOBLES (Tallas fijas exclusivas de carta doble) */
+        .spell-card.double-card .card-title { font-size: 20px; }
+        .spell-card.double-card .card-subtitle { font-size: 10px; margin-bottom: 2mm;}
+        .spell-card.double-card .card-meta { font-size: 12px; margin-bottom: 3.5mm; gap: 3mm; }
+        .spell-card.double-card .card-meta strong { font-size: 9px; }
         .spell-card.double-card .card-desc p { margin: 0 0 3mm 0; }
-        .spell-card.double-card .card-nav-sup { font-size: 13px; line-height: 1.35; margin-top: 2mm; padding-top: 1.5mm; }
-        .spell-card.double-card .card-nav-sup strong { font-size: 11px; }
+        .spell-card.double-card .card-nav-sup { margin-top: 2mm; padding-top: 1.5mm; }
 
         .card-footer { display: flex; justify-content: space-between; font-size: 8.5px; color: #666; border-top: 1px solid #ccc; padding-top: 1mm; margin-top: auto; font-weight: bold; text-transform: uppercase; flex-shrink: 0; }
         .footer-classes { width: 70%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -157,7 +158,7 @@
             .preview-section, #printZone { display: block !important; width: 100%; }
             .a4-page { margin: 0 !important; box-shadow: none !important; border: none !important; page-break-after: always; page-break-inside: avoid; }
             * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
-            @page { size: A4 landscape; margin: 0; }
+            @page { size: A4 portrait; margin: 0; }
         }
     </style>
 </head>
@@ -295,7 +296,7 @@
     <div id="previewModal" class="fixed inset-0 bg-black/80 z-[10000] hidden items-center justify-center no-print backdrop-blur-sm overflow-y-auto py-10">
         <div class="p-2 relative flex flex-col items-center my-auto">
             <button onclick="togglePreview()" class="absolute -top-4 -right-4 bg-red-500 hover:bg-red-600 text-white rounded-full w-8 h-8 font-bold border-2 border-[#222] z-50 transition-transform hover:scale-110 shadow-lg">✕</button>
-            <div id="previewCard" class="shadow-2xl rounded-md" style="width: 99mm; background: white;"></div>
+            <div id="previewCard" class="shadow-2xl rounded-md" style="width: 70mm; background: white;"></div>
         </div>
     </div>
 
@@ -479,40 +480,67 @@
         const clearAll = () => { if(confirm('¿Borrar todas las cartas?')) { spells = []; render(); } };
         const removeSpell = (i) => { spells.splice(i, 1); render(); };
 
-        // Función auxiliar inteligente para calcular si una carta debe ser doble
-        function checkIsDouble(s) {
-            if (s.carta_doble) return true;
-            
+        // Función auxiliar inteligente para calcular métricas de texto (Solo para descripciones y nav)
+        function calculateCardMetrics(s) {
             let desc = s.descripcion || '';
             let nav = s.niveles_superiores || '';
             
             // Retirar etiquetas HTML para contar caracteres puros
-            let textLength = desc.replace(/<[^>]+>/g, '').length + nav.replace(/<[^>]+>/g, '').length;
+            let cleanDesc = desc.replace(/<[^>]+>/g, '');
+            let cleanNav = nav.replace(/<[^>]+>/g, '');
+            let textLength = cleanDesc.length + cleanNav.length;
             
-            // Contar el número de párrafos. Cada párrafo suma tamaño "visual" extra.
+            // Contar el número de párrafos.
             let pCount = (desc.match(/<p>/g) || []).length;
             
-            // Un párrafo equivale a unos 50 caracteres extra de peso visual
-            let visualWeight = textLength + (pCount * 50);
+            // Peso visual base de la descripción
+            let visualWeight = textLength + (pCount * 45);
             
-            // Dar peso extra si existe la caja de "niveles superiores" (ya que la propia caja ocupa espacio)
-            if (nav.length > 5) visualWeight += 60;
+            // Dar peso extra considerable si existe la caja de "niveles superiores" (ocupa bloque)
+            let cleanNavTrimmed = cleanNav.trim().toLowerCase();
+            let hasNav = (cleanNavTrimmed !== "" && cleanNavTrimmed !== "no" && cleanNavTrimmed !== "-" && cleanNavTrimmed !== "ninguno");
+            if (hasNav) {
+                visualWeight += 60; 
+            }
             
-            // Si el peso visual pasa de 850, es mejor hacerla doble para que no se corte
-            return visualWeight > 850;
+            // Si el usuario marcó manualmente "Forzar Carta Doble"
+            if (s.carta_doble) return { double: true, fontSize: '13px', lineHeight: '1.4', navSize: '12px' };
+
+            // --- LÓGICA DE ESCALADO DINÁMICO ---
+            // Los metadatos ahora son de tamaño fijo. Las descripciones disponen de menos espacio dinámico.
+            // Si el tamaño tiene que ser MENOR a 11px (~580 peso) se convierte en carta doble automáticamente.
+            
+            if (visualWeight <= 350) {
+                return { double: false, fontSize: '12px', lineHeight: '1.3', navSize: '11px' }; // Tamaño ideal
+            } else if (visualWeight <= 580) {
+                return { double: false, fontSize: '11px', lineHeight: '1.25', navSize: '10px' }; // Tamaño reducido (Mínimo para carta normal)
+            } else {
+                // EXCESO DE PESO VISUAL: FORZAR CARTA DOBLE
+                // Si llegamos aquí, en 11px no entraba en una sola carta. Le damos formato doble.
+                if (visualWeight <= 1400) {
+                    return { double: true, fontSize: '13px', lineHeight: '1.4', navSize: '12px' }; // Doble Ideal
+                } else if (visualWeight <= 2000) {
+                    return { double: true, fontSize: '12px', lineHeight: '1.3', navSize: '11px' }; // Doble reducido
+                } else {
+                    return { double: true, fontSize: '11px', lineHeight: '1.2', navSize: '10.5px' }; // Doble muy lleno
+                }
+            }
         }
 
         function previewSpell(i) {
             const s = processSpellText(filteredDb[i]);
-            let isDouble = checkIsDouble(s);
+            let metrics = calculateCardMetrics(s);
             
             const pCard = document.getElementById('previewCard');
-            pCard.style.height = isDouble ? '210mm' : '105mm'; 
-            pCard.innerHTML = genCardHTML(s, null, isDouble);
+            pCard.style.height = metrics.double ? '198mm' : '99mm'; 
+            pCard.innerHTML = genCardHTML(s, null, metrics.double, metrics);
             togglePreview();
         }
 
-        function genCardHTML(s, idx, isDouble) {
+        function genCardHTML(s, idx, isDouble, metrics) {
+            // Si no se pasan métricas, las calculamos como fallback
+            if (!metrics) metrics = calculateCardMetrics(s);
+
             let sub = `${s.nivel == 0 ? 'Truco' : `Nivel ${s.nivel}`} de ${s.escuela}`; if (s.ritual) sub += " (Ritual)";
             
             // Lógica sólida para ocultar "Niveles Superiores" solo si está vacío o dice "no" o "-"
@@ -536,13 +564,13 @@
                     
                     <div class="card-flavor-bar"><div class="pattern-layer"><div class="pat-split pat-odd"></div><div class="pat-split pat-even"></div></div></div>
                     
-                    <div class="card-meta font-body"><div><strong>Tiempo</strong>${s.tiempo_lanzamiento || '-'}</div><div><strong>Alcance</strong>${s.alcance || '-'}</div><div><strong>Componentes</strong>${s.componentes || '-'}</div><div><strong>Duración</strong>${s.concentracion ? '<span style="background:black;color:white;border-radius:50%;width:12px;height:12px;display:inline-block;text-align:center;font-size:9px;line-height:12px;margin-right:3px;">C</span>' : ''}${s.duracion || '-'}</div></div>
+                    <div class="card-meta font-body"><div><strong>Tiempo</strong>${s.tiempo_lanzamiento || '-'}</div><div><strong>Alcance</strong>${s.alcance || '-'}</div><div><strong>Componentes</strong>${s.componentes || '-'}</div><div><strong>Duración</strong>${s.concentracion ? '<span style="background:black;color:white;border-radius:50%;width:1.2em;height:1.2em;display:inline-flex;align-items:center;justify-content:center;font-size:0.8em;margin-right:3px;transform:translateY(-1px);">C</span>' : ''}${s.duracion || '-'}</div></div>
                     
-                    <!-- DIV 1: Descripción principal (se ocultará el final si es demasiado largo) -->
-                    <div class="card-desc font-body">${s.descripcion || '<span class="text-gray-400 italic">Sin descripción...</span>'}</div>
+                    <!-- DIV 1: Descripción principal con escalado dinámico -->
+                    <div class="card-desc font-body" style="font-size: ${metrics.fontSize}; line-height: ${metrics.lineHeight};">${s.descripcion || '<span class="text-gray-400 italic">Sin descripción...</span>'}</div>
                     
-                    <!-- DIV 2: Niveles superiores (Nunca se cortará porque tiene flex-shrink: 0) -->
-                    ${showNavSup ? `<div class="card-nav-sup font-body"><strong>Superiores:</strong> ${navSupRaw}</div>` : ''}
+                    <!-- DIV 2: Niveles superiores con escalado dinámico -->
+                    ${showNavSup ? `<div class="card-nav-sup font-body" style="font-size: ${metrics.navSize}; line-height: ${metrics.lineHeight};"><strong>Superiores:</strong> ${navSupRaw}</div>` : ''}
                     
                     <div class="card-footer font-body"><div class="footer-classes">${s.clases || '-'}</div><div class="footer-source">${s.fuente || '-'}</div></div>
                 </div>
@@ -566,21 +594,21 @@
             };
 
             spells.forEach((s, idx) => {
-                let isDouble = checkIsDouble(s);
-                let cardData = { spell: s, index: idx, double: isDouble };
+                let metrics = calculateCardMetrics(s);
+                let cardData = { spell: s, index: idx, double: metrics.double, metrics: metrics };
 
-                if (isDouble) {
-                    if (c1 === 0) { c1 = 2; currentChunk.push(cardData); }
-                    else if (c2 === 0) { c2 = 2; currentChunk.push(cardData); }
-                    else if (c3 === 0) { c3 = 2; currentChunk.push(cardData); }
+                if (metrics.double) {
+                    if (c1 <= 1) { c1 += 2; currentChunk.push(cardData); }
+                    else if (c2 <= 1) { c2 += 2; currentChunk.push(cardData); }
+                    else if (c3 <= 1) { c3 += 2; currentChunk.push(cardData); }
                     else {
                         pushPage();
                         c1 = 2; currentChunk.push(cardData);
                     }
                 } else {
-                    if (c1 < 2) { c1++; currentChunk.push(cardData); }
-                    else if (c2 < 2) { c2++; currentChunk.push(cardData); }
-                    else if (c3 < 2) { c3++; currentChunk.push(cardData); }
+                    if (c1 < 3) { c1++; currentChunk.push(cardData); }
+                    else if (c2 < 3) { c2++; currentChunk.push(cardData); }
+                    else if (c3 < 3) { c3++; currentChunk.push(cardData); }
                     else {
                         pushPage();
                         c1 = 1; currentChunk.push(cardData);
@@ -594,7 +622,7 @@
                 pageDiv.className = 'a4-page';
                 
                 chunk.forEach(item => {
-                    pageDiv.innerHTML += genCardHTML(item.spell, item.index, item.double);
+                    pageDiv.innerHTML += genCardHTML(item.spell, item.index, item.double, item.metrics);
                 });
                 
                 pZone.appendChild(pageDiv);
