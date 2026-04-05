@@ -2220,7 +2220,7 @@
         "ritual": false,
         "clases": "Druida, Explorador",
         "fuente": "Manual del Jugador 2024",
-        "descripcion": "Plantas apresadoras brotan del suelo en un cuadrado de **6 metros (20 ft)** de lado dentro del alcance. Mientras dura el conjuro, estas plantas convierten el suelo del área en Terreno difícil. Desaparecen al terminar el conjuro.\nToda criatura (excepto tú) en el área al lanzar el conjuro debe superar una tirada de salvación de Fuerza o tener el estado de Apresado hasta que el conjuro termine. Una criatura apresada puede tomar una acción para realizar una prueba de Fuerza (Atletismo) contra tu CD de salvación de conjuros. Si la supera, se libera de las plantas y deja de estar apresada por ellas."",
+        "descripcion": "Plantas apresadoras brotan del suelo en un cuadrado de **6 metros (20 ft)** de lado dentro del alcance. Mientras dura el conjuro, estas plantas convierten el suelo del área en Terreno difícil. Desaparecen al terminar el conjuro.\nToda criatura (excepto tú) en el área al lanzar el conjuro debe superar una tirada de salvación de Fuerza o tener el estado de Apresado hasta que el conjuro termine. Una criatura apresada puede tomar una acción para realizar una prueba de Fuerza (Atletismo) contra tu CD de salvación de conjuros. Si la supera, se libera de las plantas y deja de estar apresada por ellas.",
         "niveles_superiores": ""
     },
     {
