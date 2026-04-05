@@ -620,7 +620,7 @@
         "ritual": false,
         "clases": "Druida, Explorador",
         "fuente": "Manual del Jugador 2024",
-        "descripcion": "",
+        "descripcion": "Diez bayas aparecen en tu mano y quedan imbuidas de magia mientras dura el conjuro. Una criatura puede tomar una acción bonus para comer una baya. Comer una baya restaura **1** punto de golpe y proporciona suficiente alimento para sustentar a la criatura durante un día.\nLas bayas no consumidas desaparecen al terminar el conjuro."",
         "niveles_superiores": ""
     },
     {
@@ -2940,7 +2940,7 @@
         "ritual": true,
         "clases": "Bardo, Druida, Explorador, Brujo",
         "fuente": "Manual del Jugador 2024",
-        "descripcion": "",
+        "descripcion": "Hasta que termine el conjuro, podrás comprender y comunicarte verbalmente con bestias, y usar cualquiera de las opciones de la acción de influir con ellas.\nLa mayoría de las bestias tienen poco que decir sobre temas que no tengan que ver con la supervivencia o la compañía, pero como mínimo, una bestia puede darte información sobre lugares y monstruos cercanos, incluyendo lo que haya percibido en el último día.",
         "niveles_superiores": ""
     },
  {
@@ -5196,7 +5196,7 @@
         "ritual": false,
         "clases": "Clérigo, Druida",
         "fuente": "Manual del Jugador 2024",
-        "descripcion": "",
+        "descripcion": "Tocas a una criatura voluntaria y eliges un tipo de daño: ácido, contundente, frío, fuego, relámpago, necrótico, perforante, veneno, radiante, cortante o trueno. Cuando la criatura recibe daño del tipo elegido antes de que termine el conjuro, reduce el daño total recibido en **1d4**. Una criatura solo puede beneficiarse de este conjuro una vez por turno.",
         "niveles_superiores": ""
     },
     {
