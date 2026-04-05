@@ -4572,8 +4572,8 @@
         "ritual": false,
         "clases": "Clérigo, Druida",
         "fuente": "Manual del Jugador 2024",
-        "descripcion": "",
-        "niveles_superiores": ""
+        "descripcion": "Elige una criatura dentro del alcance que tenga **0** puntos de golpe y que no esté muerta. La criatura se vuelve estable.",
+        "niveles_superiores": "El alcance se duplica al alcanzar los niveles 5 (**9 metros (30 ft)**), 11 (**18 metros (60 ft)**) y 17 (**36 metros (120 ft)**)."
     },
     {
         "nombre": "Piel pétrea",
@@ -5532,8 +5532,8 @@
         "ritual": false,
         "clases": "Druida",
         "fuente": "Manual del Jugador 2024",
-        "descripcion": "",
-        "niveles_superiores": ""
+        "descripcion": "Un garrote o un bastón que sostengas está imbuido del poder de la naturaleza. Hasta que termine el conjuro, puedes usar tu aptitud mágica en lugar de tu Fuerza para las tiradas de ataque y daño de los ataques cuerpo a cuerpo con esa arma, y el dado de daño del arma se convierte en un **d8**. Si el ataque inflige daño, puede ser daño de fuerza o del tipo de daño normal del arma (a tu elección).\nEl conjuro termina antes de tiempo si lo lanzas de nuevo o si sueltas el arma.",
+        "niveles_superiores": "El dado de daño del arma cambia al alcanzar los niveles 5 (**d10**), 11 (**d12**) y 17 (**2d6**)."
     },
     {
         "nombre": "Silencio",
@@ -5916,8 +5916,8 @@
         "ritual": false,
         "clases": "Explorador",
         "fuente": "Manual del Jugador 2024",
-        "descripcion": "",
-        "niveles_superiores": ""
+        "descripcion": "Al acertar a la criatura, este conjuro crea una lluvia de espinas que brota de tu arma a distancia o munición. El objetivo del ataque y toda criatura en un radio de **1,50 metros (5 ft)** alrededor de él realizan una tirada de salvación de Destreza, recibiendo **1d10** de daño perforante si falla la tirada o la mitad si la superan.",
+        "niveles_superiores": "El daño aumenta en **1d10** por cada nivel de espacio de conjuro superior a 1."
     },
     {
         "nombre": "Tormenta de fuego",
