@@ -5372,8 +5372,8 @@
         "ritual": false,
         "clases": "Druida, Hechicero, Brujo, Mago",
         "fuente": "Manual del Jugador 2024",
-        "descripcion": "",
-        "niveles_superiores": ""
+        "descripcion": "Rocías una niebla tóxica contra una criatura dentro del alcance. Realizas un ataque de conjuro a distancia contra el objetivo. Si acierta, el objetivo recibe **1d12** de daño de veneno.",
+        "niveles_superiores": "El daño aumenta en **1d12** al alcanzar los niveles 5 (**2d12**), 11 (**3d12**) y 17 (**4d12**)."
     },
     {
         "nombre": "Saber druídico",
