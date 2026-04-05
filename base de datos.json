@@ -92,7 +92,7 @@
         "ritual": true,
         "clases": "Explorador, Mago",
         "fuente": "Manual del Jugador 2024",
-        "descripcion": "",
+        "descripcion": "Configuras una alarma contra intrusiones. Elige una puerta, una ventana o un área dentro del alcance que no sea mayor que un Cubo de **6 metros (20 ft)** de lado. Hasta que el conjuro termine, una alarma te alertará cada vez que una criatura toque o entre en el área protegida. Al lanzar el conjuro, puedes designar criaturas que no activarán la alarma. También eliges si la alarma es audible o mental:\n**Alarma sonora.** La alarma produce el sonido de una campanilla durante 10 segundos, que será audible en un radio de **18 metros (60 ft)** del área protegida.\n**Alarma mental.** Recibes una alerta mental si te encuentras a **1,5 km (1 mile)** o menos del área protegida. Esta alerta te despierta si estás dormido.",
         "niveles_superiores": ""
     },
     {
@@ -3868,8 +3868,8 @@
         "ritual": false,
         "clases": "Explorador",
         "fuente": "Manual del Jugador 2024",
-        "descripcion": "",
-        "niveles_superiores": ""
+        "descripcion": "Marcas mágicamente como presa a una criatura que puedas ver dentro del alcance. Hasta que el conjuro termine, infliges **1d6** de daño de fuerza adicional al objetivo cada vez que lo aciertes con una tirada de ataque. También tienes Ventaja en cualquier prueba de Sabiduría (Percepción o Supervivencia) que realices para encontrarlo.\nSi el objetivo queda con **0** punto de golpe antes de que termine el conjuro, puedes usar una acción bonus para marcar una nueva criatura que puedas ver dentro del alcance.",
+        "niveles_superiores": "Tu concentración puede durar más con un espacio de conjuro de nivel 3 o 4 (hasta 8 horas) o 5 o superior (hasta 24 horas)."
     },
     {
         "nombre": "Marchitar",
@@ -5388,7 +5388,7 @@
         "ritual": false,
         "clases": "Druida",
         "fuente": "Manual del Jugador 2024",
-        "descripcion": "",
+        "descripcion": "Susurrando a los espíritus de la naturaleza, creas uno de los siguientes efectos dentro del alcance.\n**Sensor climático.** Creas un efecto sensorial inofensivo de tamaño Diminuto que predice el tiempo en tu ubicación durante las próximas 24 horas. El efecto puede manifestarse como un orbe dorado para cielos despejados, una nube para lluvia, copos de nieve cayendo para nieve, etc. Este efecto persiste durante 1 round.\n**Florecer.** Haces que una flor florezca al instante, que una vaina se abra o que un capullo florezca.\n**Efecto sensorial.** Creas un efecto sensorial inofensivo, como hojas cayendo, hadas espectrales danzantes, una suave brisa, el sonido de un animal o un ligero olor a mofeta. El efecto debe caber en un Cubo de **1,50 metros (5 ft)** de lado.\n**Jugar con fuego.** Enciendes o apagas una vela, una antorcha o una fogata.",
         "niveles_superiores": ""
     },
     {
