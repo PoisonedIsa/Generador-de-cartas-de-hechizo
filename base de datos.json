@@ -1596,8 +1596,8 @@
         "ritual": false,
         "clases": "Druida, Hechicero, Mago",
         "fuente": "Manual del Jugador 2024",
-        "descripcion": "",
-        "niveles_superiores": ""
+        "descripcion": "Creas un fragmento de hielo y lo lanzas a una criatura dentro del alcance. Realizas un ataque de conjuro a distancia contra el objetivo. Si acierta, el objetivo recibe **1d10** de daño perforante. Que acierte o falle, el fragmento explota. El objetivo y toda criatura en un radio de **1,50 metros (5 ft)** deben superar una tirada de salvación de Destreza o recibir **2d6** de daño de frío.",
+        "niveles_superiores": "El daño de frío aumenta en **1d6** por cada nivel de espacio de conjuro superior a 1."
     },
     {
         "nombre": "Curar",
@@ -1868,7 +1868,7 @@
         "ritual": true,
         "clases": "Bardo, Clérigo, Druida, Paladín, Explorador, Hechicero, Brujo, Mago",
         "fuente": "Manual del Jugador 2024",
-        "descripcion": "",
+        "descripcion": "Hasta que termine el conjuro, percibes la presencia de efectos mágicos en un rayo de **9 metros (30 ft)**. Si percibes dichos efectos, puedes tomar la acción de magia para ver un aura tenue alrededor de cualquier criatura u objeto visible en el área que contenga la magia. Si un efecto fue creado por un conjuro, sabes la escuela de magia del conjuro.\nEl conjuro no puede atravesar **30 cm (1 ft)** de piedra, tierra o madera, **2,50 cm (1 inch)** de metal, o una fina lámina de plomo.",
         "niveles_superiores": ""
     },
     {
@@ -1916,7 +1916,7 @@
         "ritual": true,
         "clases": "Clérigo, Druida, Paladín, Explorador",
         "fuente": "Manual del Jugador 2024",
-        "descripcion": "",
+        "descripcion": "Hasta que termine el conjuro, percibes la ubicación de venenos, criaturas venenosas, y contagios mágicos en un rayo de **9 metros (30 ft)**. Percibes el tipo de veneno, criatura o contagio en cada caso.\nEl conjuro no puede atravesar **30 cm (1 ft)** de piedra, tierra o madera, **2,50 cm (1 inch)** de metal, o una fina lámina de plomo.",
         "niveles_superiores": ""
     },
     {
@@ -2172,7 +2172,7 @@
         "ritual": true,
         "clases": "Mago",
         "fuente": "Manual del Jugador 2024",
-        "descripcion": "",
+        "descripcion": "Obtienes el servicio de un familiar, un espíritu que toma una forma animal que eliges: murciélago, gato, rana, halcón, lagarto, pulpo, búho, rata, cuervo, araña, comadreja u otra bestia con un VD de **0**. Al aparecer en un espacio desocupado dentro del alcance, el familiar tiene el perfil de la forma elegida, aunque es un celestial, un feérico o un infernal (a tu elección) en lugar de una bestia. Tu familiar actúa independientemente de ti, pero obedece tus órdenes.\n**Conexión telepática.** Mientras tu familiar esté en un radio de **30 metros (100 ft)** alrededor de ti, puedes comunicarte con él telepáticamente. Además, como acción bonus, puedes ver a través de los ojos del familiar y oír lo que oye hasta el comienzo de tu siguiente turno, beneficiándote de sus sentidos especiales.\nFinalmente, cuando lanzas un conjuro con alcance de toque, tu familiar puede realizar el toque. Tu familiar debe estar en un radio de **30 metros (100 ft)** y debe usar una reacción para realizar el toque cuando lanzas el conjuro.\n**Combate.** El familiar es un aliado tuyo y de tus aliados. Tira su propia iniciativa y actúa en su turno. Un familiar no puede atacar, pero puede realizar otras acciones de manera normal.\n**Desaparición del familiar.** Cuando los puntos de golpe del familiar bajan a **0**, desaparece. Reaparece después de que lances este conjuro de nuevo. Como acción de magia, puedes retirar temporalmente al familiar a una dimensión de bolsillo. Alternativamente, puedes retirarlo para siempre. Como acción de magia, mientras está retirado temporalmente, puedes hacer que reaparezca en un espacio desocupado en un radio de **9 metros (30 ft)**. Siempre que los puntos de golpe del familiar bajan a **0** o desaparece en la dimensión de bolsillo, deja en su espacio todo lo que llevaba.\n**Un solo familiar.** No puedes tener más de un familiar a la vez. Si lanzas este conjuro mientras tienes un familiar, le haces adoptar una nueva forma elegible.",
         "niveles_superiores": ""
     },
     {
@@ -2220,7 +2220,7 @@
         "ritual": false,
         "clases": "Druida, Explorador",
         "fuente": "Manual del Jugador 2024",
-        "descripcion": "",
+        "descripcion": "Plantas apresadoras brotan del suelo en un cuadrado de **6 metros (20 ft)** de lado dentro del alcance. Mientras dura el conjuro, estas plantas convierten el suelo del área en Terreno difícil. Desaparecen al terminar el conjuro.\nToda criatura (excepto tú) en el área al lanzar el conjuro debe superar una tirada de salvación de Fuerza o tener el estado de Apresado hasta que el conjuro termine. Una criatura apresada puede tomar una acción para realizar una prueba de Fuerza (Atletismo) contra tu CD de salvación de conjuros. Si la supera, se libera de las plantas y deja de estar apresada por ellas."",
         "niveles_superiores": ""
     },
     {
@@ -4156,8 +4156,8 @@
         "ritual": false,
         "clases": "Druida, Explorador, Hechicero, Mago",
         "fuente": "Manual del Jugador 2024",
-        "descripcion": "",
-        "niveles_superiores": ""
+        "descripcion": "Creas una Esfera de niebla de **6 metros (20 ft)** de radio centrada en un punto dentro del alcance. La Esfera queda muy oscura. Dura hasta que termine el conjuro o hasta que un viento fuerte (como el que crea ráfaga de viento) la dispersa.",
+        "niveles_superiores": "El radio de la niebla aumenta en **6 metros (20 ft)** por cada nivel de espacio de conjuro superior a 1."
     },
     {
         "nombre": "Nube incendiaria",
